@@ -1,0 +1,13 @@
+/vendor/
+/coverage/
+/build/
+/composer.phar
+/deploy.sh
+/session-context.tmp.md
+/session-handoff.tmp.md
+/.phpunit.result.cache
+/.env
+/.env.*
+*.log
+*.map
+*.tmp.md
