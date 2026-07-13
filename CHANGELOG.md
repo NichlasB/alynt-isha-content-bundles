@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## Unreleased
+
+- Add provider contracts and a central entitlement resolver for administrator, legacy-product, and explicit bundle access.
+- Enforce completed-order status, malformed-manifest filtering, and deduplicated video resolution in the policy core.
+- Add the T5 entitlement acceptance matrix and architecture documentation.
+- Add the bundle manifest metadata schema, admin capability/nonce boundary, manifest normalizer, persistence contract, and validation tests.
+- Add the video access decision layer for entitled pass-through, bundle redirects, unavailable-content redirects, and redirect-loop prevention.
+- Add the entitlement-backed purchased-video library resolver, legacy-compatible card renderer, presentation value object, and bundle/legacy/deduplication tests.
+- Add shared catalog eligibility, discovery, and purchase-blocking policy for qualifying bundles, nonqualifying teachers, retired legacy products, and unrelated-product pass-through.
+- Add the canonical T3 legacy mapping definition and approval-safe migration preview, drift detection, idempotent apply, durable-snapshot boundary, automatic failure rollback, and complete logical rollback tests.
+- Connect the policy core to WordPress, WooCommerce, and HPOS-compatible order APIs through production adapters.
+- Add deterministic access, catalog, add-to-cart, shortcode, discovery-query, and bundle product administration hooks.
+- Supersede the active legacy access and shortcode callbacks at controlled priorities without changing Advanced Scripts during plugin activation.
+- Add signed WP-CLI migration preview/apply/rollback commands with explicit `--yes` write gates and a durable complete snapshot.
+- Embed the approved non-sensitive runtime baseline, including the Raw Chef Gail grace qualification, with a per-video metadata override for future content.
+- Filter the compiled Brizy teacher-directory snapshot through the central eligibility policy so nonqualifying cards stay hidden until a qualifying bundle is published.
+- Document the approved runtime remeasurement, existing/new bundle maintenance, verification, legacy-access, deployment, and rollback procedure.
+
 ## 0.1.0 - 2026-07-13
 
 - Add the inert plugin bootstrap and namespaced runtime shell.

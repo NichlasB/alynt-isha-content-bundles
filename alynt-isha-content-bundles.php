@@ -41,8 +41,8 @@ register_deactivation_hook(
 /**
  * Register the plugin runtime.
  *
- * The initial scaffold is intentionally inert. Feature hooks are added by
- * later implementation tasks and must not run during activation.
+ * Activation remains write-free; runtime behavior is registered only after
+ * all plugins have loaded.
  *
  * @return void
  */

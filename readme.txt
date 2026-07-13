@@ -11,7 +11,7 @@ Manages explicit teacher content bundles and compatible legacy video entitlement
 
 == Description ==
 
-Version 0.1.0 is an inert, activation-safe scaffold. It does not modify products, orders, entitlements, post metadata, or customer data.
+Version 0.1.0 provides teacher bundle manifests, completed-order entitlements, direct-video access enforcement, bundle-aware shortcodes, catalog and purchase controls, and signed WP-CLI migration tooling. Activation and deactivation remain write-free.
 
 == Installation ==
 
@@ -21,4 +21,6 @@ Version 0.1.0 is an inert, activation-safe scaffold. It does not modify products
 == Changelog ==
 
 = 0.1.0 =
-* Add the inert plugin scaffold, lifecycle classes, test tooling, and updater-compatible release packaging.
+* Add explicit $50 teacher bundles with a 3,540-second approved cutoff.
+* Preserve completed legacy individual-video entitlements.
+* Add bundle-aware access, library, discovery, purchase, admin, and migration integration.

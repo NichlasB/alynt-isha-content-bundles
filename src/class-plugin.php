@@ -17,14 +17,62 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Plugin {
 
 	/**
-	 * Start the plugin runtime.
+	 * Whether runtime registration has completed.
 	 *
-	 * The scaffold exposes only a lifecycle action. It does not register
-	 * customer-facing behavior or write WordPress data.
+	 * @var bool
+	 */
+	private $started = false;
+
+	/**
+	 * Start the plugin runtime.
 	 *
 	 * @return void
 	 */
 	public function run() {
+		if ( $this->started ) {
+			return;
+		}
+
+		$this->started     = true;
+		$catalog_provider  = new Integrations\WordPressCatalogEligibilityProvider();
+		$catalog_policy    = new Services\CatalogEligibilityPolicy( $catalog_provider );
+		$access_provider   = new Integrations\WordPressAccessContentProvider();
+		$purchase_provider = new Integrations\WooCommercePurchaseProvider();
+		$entitlements      = new Services\EntitlementResolver(
+			$access_provider,
+			$purchase_provider,
+			$access_provider
+		);
+		$video_provider    = new Integrations\WordPressVideoLibraryProvider();
+		$library_resolver  = new Services\PurchasedVideoLibraryResolver( $entitlements, $video_provider );
+		$manifest_admin    = new Services\BundleManifestAdminService(
+			new Integrations\WordPressAdminSecurityProvider(),
+			new Services\BundleManifestNormalizer( new Integrations\WordPressBundleContentProvider() ),
+			new Integrations\WordPressBundleManifestStore()
+		);
+		$route_provider    = new Integrations\WordPressVideoRouteProvider( $catalog_policy );
+		$runtime           = new Integrations\RuntimeHooks(
+			new Services\VideoAccessController( $entitlements, $route_provider ),
+			$catalog_policy,
+			$library_resolver,
+			new Services\PurchasedVideoLibraryRenderer(),
+			$video_provider,
+			new Services\TeacherVideoRenderer(),
+			$manifest_admin
+		);
+		$runtime->register();
+		$video_runtime_admin = new Integrations\VideoRuntimeAdmin();
+		$video_runtime_admin->register();
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			$migration_store = new Integrations\WordPressMigrationStore();
+			$migration       = new Services\RelationshipMigrationService( $migration_store );
+			\WP_CLI::add_command(
+				'isha-content-bundles migration',
+				new Integrations\MigrationCommand( $migration, $migration_store )
+			);
+		}
+
 		/**
 		 * Fires after the plugin runtime has loaded.
 		 *

@@ -13,7 +13,7 @@ use Alynt\ISHAContentBundles\Plugin;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Verifies the inert plugin scaffold.
+ * Verifies plugin identity, lifecycle, and runtime composition.
  */
 final class BootstrapTest extends TestCase {
 
@@ -57,7 +57,7 @@ final class BootstrapTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function test_runtime_is_registered_without_feature_hooks() {
+	public function test_runtime_registers_feature_hooks_at_controlled_priorities() {
 		$actions = $GLOBALS['alynt_isha_content_bundles_test_hooks']['actions'];
 
 		$this->assertCount( 1, $actions['plugins_loaded'] );
@@ -65,6 +65,27 @@ final class BootstrapTest extends TestCase {
 
 		$plugin = new Plugin();
 		$plugin->run();
+		$hooks  = $GLOBALS['alynt_isha_content_bundles_test_hooks'];
+
+		$this->assertSame( 99, $hooks['action_details']['init'][0]['priority'] );
+		$this->assertSame( 1, $hooks['action_details']['template_redirect'][0]['priority'] );
+		$this->assertSame( 2, $hooks['filters']['woocommerce_is_purchasable'][0]['accepted_args'] );
+		$this->assertSame( 3, $hooks['filters']['woocommerce_add_to_cart_validation'][0]['accepted_args'] );
+		$this->assertSame( 20, $hooks['filters']['the_posts'][0]['priority'] );
+		$this->assertArrayHasKey( 'add_meta_boxes_video', $hooks['actions'] );
+		$this->assertSame( 3, $hooks['action_details']['save_post_video'][0]['accepted_args'] );
+
+		$hooks['action_details']['init'][0]['callback']();
+		$this->assertContains(
+			array(
+				'hook'     => 'template_redirect',
+				'callback' => 'restrict_video_access',
+				'priority' => 10,
+			),
+			$GLOBALS['alynt_isha_content_bundles_test_hooks']['removed_actions']
+		);
+		$this->assertArrayHasKey( 'purchased_videos', $GLOBALS['alynt_isha_content_bundles_test_shortcodes'] );
+		$this->assertArrayHasKey( 'teacher_videos', $GLOBALS['alynt_isha_content_bundles_test_shortcodes'] );
 
 		$this->assertContains(
 			'alynt_isha_content_bundles_loaded',
