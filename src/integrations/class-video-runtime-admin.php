@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\SiteDefinition;
 
 /**
  * Provides a secure editor for future video runtime measurements.
+ *
+ * @since 0.2.0
  */
 final class VideoRuntimeAdmin {
 
@@ -22,6 +24,8 @@ final class VideoRuntimeAdmin {
 	 * Register video administration hooks.
 	 *
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function register(): void {
 		add_action( 'add_meta_boxes_' . SiteDefinition::VIDEO_POST_TYPE, array( $this, 'add_meta_box' ) );
@@ -32,6 +36,8 @@ final class VideoRuntimeAdmin {
 	 * Add the verified runtime meta box.
 	 *
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function add_meta_box(): void {
 		add_meta_box(
@@ -49,6 +55,8 @@ final class VideoRuntimeAdmin {
 	 *
 	 * @param mixed $post Video post object.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function render_meta_box( $post ): void {
 		$post_id = is_object( $post ) && isset( $post->ID ) ? absint( $post->ID ) : 0;
@@ -77,6 +85,8 @@ final class VideoRuntimeAdmin {
 	 * @param mixed $post    Video post object.
 	 * @param bool  $update  Whether this is an update.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function save_runtime( int $post_id, $post, bool $update ): void {
 		unset( $post, $update );

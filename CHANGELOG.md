@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## Unreleased
 
+## 0.2.0 - 2026-07-14
+
 - Add provider contracts and a central entitlement resolver for administrator, legacy-product, and explicit bundle access.
 - Enforce completed-order status, malformed-manifest filtering, and deduplicated video resolution in the policy core.
 - Add the T5 entitlement acceptance matrix and architecture documentation.
@@ -19,6 +21,10 @@ All notable changes to this project are documented in this file.
 - Embed the approved non-sensitive runtime baseline, including the Raw Chef Gail grace qualification, with a per-video metadata override for future content.
 - Filter the compiled Brizy teacher-directory snapshot through the central eligibility policy so nonqualifying cards stay hidden until a qualifying bundle is published.
 - Document the approved runtime remeasurement, existing/new bundle maintenance, verification, legacy-access, deployment, and rollback procedure.
+- Split runtime and migration responsibilities into focused adapters and add request-local caching for repeated eligibility and purchase reads.
+- Add controlled manifest persistence failures, verified metadata restoration without a second deserialization pass, safe-redirect failure handling, and incompatible-snapshot CLI reporting.
+- Add translated front-end and administration strings, a source POT catalog, accessible watch-link labels, and namespaced presentation classes alongside the legacy markup contract.
+- Expand installation, usage, FAQ, public-hook, and uninstall-retention documentation for the first feature release.
 
 ## 0.1.0 - 2026-07-13
 

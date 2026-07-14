@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\Purchase;
 
 /**
  * Supplies product purchases to the entitlement resolver.
+ *
+ * @since 0.2.0
  */
 interface PurchaseProvider {
 
@@ -25,6 +27,8 @@ interface PurchaseProvider {
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return Purchase[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_purchases( int $user_id ): array;
 }

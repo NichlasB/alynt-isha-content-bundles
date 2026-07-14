@@ -15,6 +15,8 @@ use InvalidArgumentException;
 
 /**
  * Represents one purchased product and the state of its order.
+ *
+ * @since 0.2.0
  */
 final class Purchase {
 
@@ -38,6 +40,8 @@ final class Purchase {
 	 * @param int    $product_id   WooCommerce product ID.
 	 * @param string $order_status WooCommerce order status.
 	 * @throws InvalidArgumentException When the product ID is invalid.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( int $product_id, string $order_status ) {
 		if ( $product_id <= 0 ) {
@@ -52,6 +56,8 @@ final class Purchase {
 	 * Get the purchased product ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_product_id(): int {
 		return $this->product_id;
@@ -61,6 +67,8 @@ final class Purchase {
 	 * Get the normalized order status.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_order_status(): string {
 		return $this->order_status;
@@ -70,6 +78,8 @@ final class Purchase {
 	 * Determine whether the purchase grants access.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_completed(): bool {
 		return in_array( $this->order_status, array( 'completed', 'wc-completed' ), true );

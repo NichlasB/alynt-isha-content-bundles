@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Represents the video facts used during bundle validation.
+ *
+ * @since 0.2.0
  */
 final class BundleVideo {
 
@@ -59,6 +61,8 @@ final class BundleVideo {
 	 * @param string $status                 WordPress post status.
 	 * @param float  $runtime_seconds        Runtime in seconds.
 	 * @param bool   $intentionally_retained Whether a non-published video can be stored.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct(
 		int $id,
@@ -78,6 +82,8 @@ final class BundleVideo {
 	 * Get the video ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_id(): int {
 		return $this->id;
@@ -87,6 +93,8 @@ final class BundleVideo {
 	 * Get the owning teacher ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_teacher_id(): int {
 		return $this->teacher_id;
@@ -96,6 +104,8 @@ final class BundleVideo {
 	 * Get the runtime in seconds.
 	 *
 	 * @return float
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_runtime_seconds(): float {
 		return $this->runtime_seconds;
@@ -105,6 +115,8 @@ final class BundleVideo {
 	 * Determine whether the video can be stored in a manifest.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_storable(): bool {
 		return 'publish' === $this->status || $this->intentionally_retained;

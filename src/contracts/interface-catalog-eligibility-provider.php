@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\BundleManifest;
 
 /**
  * Supplies product and teacher relationships used by catalog policy.
+ *
+ * @since 0.2.0
  */
 interface CatalogEligibilityProvider {
 
@@ -23,6 +25,8 @@ interface CatalogEligibilityProvider {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_legacy_product( int $product_id ): bool;
 
@@ -31,6 +35,8 @@ interface CatalogEligibilityProvider {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_bundle_product( int $product_id ): bool;
 
@@ -39,6 +45,8 @@ interface CatalogEligibilityProvider {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return BundleManifest|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_manifest( int $product_id ): ?BundleManifest;
 
@@ -47,6 +55,8 @@ interface CatalogEligibilityProvider {
 	 *
 	 * @param int $teacher_id Teacher owner ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_product_id_for_teacher( int $teacher_id ): ?int;
 
@@ -55,6 +65,8 @@ interface CatalogEligibilityProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_teacher_id_for_video( int $video_id ): ?int;
 }

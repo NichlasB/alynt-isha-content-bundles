@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\LibraryVideo;
 
 /**
  * Renders the legacy purchased-video card structure from normalized data.
+ *
+ * @since 0.2.0
  */
 final class PurchasedVideoLibraryRenderer {
 
@@ -27,19 +29,21 @@ final class PurchasedVideoLibraryRenderer {
 	 * @param array $videos       Candidate library video records.
 	 * @param bool  $is_logged_in Whether the current visitor is logged in.
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function render( array $videos, bool $is_logged_in ): string {
 		if ( ! $is_logged_in ) {
-			return '<p>Please log in to view your purchased videos.</p>';
+			return '<p class="alynt-isha-content-bundles__notice">' . $this->escape_html( __( 'Please log in to view your purchased videos.', 'alynt-isha-content-bundles' ) ) . '</p>';
 		}
 
 		$videos = $this->normalize_videos( $videos );
 
 		if ( empty( $videos ) ) {
-			return '<p>You have not purchased any videos yet.</p>';
+			return '<p class="alynt-isha-content-bundles__notice">' . $this->escape_html( __( 'You have not purchased any videos yet.', 'alynt-isha-content-bundles' ) ) . '</p>';
 		}
 
-		$html = '<ul class="purchased-videos">';
+		$html = '<ul class="purchased-videos alynt-isha-content-bundles__purchased-videos">';
 
 		foreach ( $videos as $video ) {
 			$html .= $this->render_video( $video );
@@ -78,7 +82,7 @@ final class PurchasedVideoLibraryRenderer {
 		$title         = $this->escape_html( $video->get_title() );
 		$thumbnail_url = $this->escape_url( $video->get_thumbnail_url() );
 		$watch_url     = $this->escape_url( $video->get_watch_url() );
-		$html          = '<li class="video-item">';
+		$html          = '<li class="video-item alynt-isha-content-bundles__video-item">';
 
 		if ( '' !== $thumbnail_url ) {
 			$html .= '<img class="video-thumbnail" src="' . $thumbnail_url . '" alt="' . $title . '">';
@@ -95,8 +99,11 @@ final class PurchasedVideoLibraryRenderer {
 		$html .= '<li>' . $this->escape_html( $video->get_author_name() ) . '</li>';
 		$html .= '</ul>';
 		$html .= '<h3>' . $title . '</h3>';
-		$html .= '<a href="' . $watch_url . '">Watch</a>';
-		$html .= '</div>';
+		/* translators: %s: Video title. */
+		$watch_label = sprintf( __( 'Watch %s', 'alynt-isha-content-bundles' ), $video->get_title() );
+		$html       .= '<a href="' . $watch_url . '" aria-label="' . $this->escape_html( $watch_label ) . '">';
+		$html       .= $this->escape_html( __( 'Watch', 'alynt-isha-content-bundles' ) ) . '</a>';
+		$html       .= '</div>';
 
 		return $html . '</li>';
 	}

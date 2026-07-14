@@ -16,6 +16,26 @@ $GLOBALS['alynt_isha_content_bundles_test_hooks']   = array();
 $GLOBALS['alynt_isha_content_bundles_test_shortcodes'] = array();
 $GLOBALS['alynt_isha_content_bundles_test_is_admin']    = false;
 
+if ( ! function_exists( '__' ) ) {
+	function __( $text, $domain = 'default' ) {
+		unset( $domain );
+		return $text;
+	}
+}
+
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return htmlspecialchars( __( $text, $domain ), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'load_plugin_textdomain' ) ) {
+	function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path = false ) {
+		unset( $domain, $deprecated, $plugin_rel_path );
+		return true;
+	}
+}
+
 if ( ! function_exists( 'plugin_dir_path' ) ) {
 	function plugin_dir_path( $file ) {
 		return trailingslashit( dirname( $file ) );

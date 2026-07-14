@@ -19,6 +19,8 @@ use Alynt\ISHAContentBundles\SiteDefinition;
 
 /**
  * Supplies entitlement facts from WordPress.
+ *
+ * @since 0.2.0
  */
 final class WordPressAccessContentProvider implements UserAccessProvider, ContentMapProvider {
 
@@ -27,6 +29,8 @@ final class WordPressAccessContentProvider implements UserAccessProvider, Conten
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_administrator( int $user_id ): bool {
 		return $user_id > 0 && user_can( $user_id, 'manage_options' );
@@ -37,6 +41,8 @@ final class WordPressAccessContentProvider implements UserAccessProvider, Conten
 	 *
 	 * @param int $product_id Product ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_legacy_video_id( int $product_id ): ?int {
 		$video_id = array_search( $product_id, MigrationDefinition::legacy_product_map(), true );
@@ -49,6 +55,8 @@ final class WordPressAccessContentProvider implements UserAccessProvider, Conten
 	 *
 	 * @param int $product_id Product ID.
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_video_ids( int $product_id ): array {
 		$value = get_post_meta( $product_id, BundleMetadata::META_VIDEO_IDS, true );
@@ -60,6 +68,8 @@ final class WordPressAccessContentProvider implements UserAccessProvider, Conten
 	 * Get every video available to administrators.
 	 *
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_all_video_ids(): array {
 		$ids = get_posts(

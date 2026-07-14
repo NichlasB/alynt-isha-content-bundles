@@ -15,6 +15,8 @@ use InvalidArgumentException;
 
 /**
  * Stores the complete logical state required by an approved rollback.
+ *
+ * @since 0.2.0
  */
 final class MigrationSnapshot {
 
@@ -55,6 +57,8 @@ final class MigrationSnapshot {
 	 * @param array<int,array<string,mixed>> $products      Product states.
 	 * @param array<int,array<string,mixed>> $teachers      Teacher states.
 	 * @param array<int,array<string,mixed>> $scripts       Advanced Scripts states.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct(
 		array $relationships,
@@ -72,6 +76,8 @@ final class MigrationSnapshot {
 	 * Get relationship row values.
 	 *
 	 * @return array<int,string[]>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_relationships(): array {
 		return $this->relationships;
@@ -81,6 +87,8 @@ final class MigrationSnapshot {
 	 * Get protected product states.
 	 *
 	 * @return array<int,array<string,mixed>>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_products(): array {
 		return $this->products;
@@ -90,6 +98,8 @@ final class MigrationSnapshot {
 	 * Get protected teacher states.
 	 *
 	 * @return array<int,array<string,mixed>>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_teachers(): array {
 		return $this->teachers;
@@ -99,6 +109,8 @@ final class MigrationSnapshot {
 	 * Get protected Advanced Scripts states.
 	 *
 	 * @return array<int,array<string,mixed>>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_scripts(): array {
 		return $this->scripts;
@@ -108,6 +120,8 @@ final class MigrationSnapshot {
 	 * Export the snapshot for durable adapter storage.
 	 *
 	 * @return array<string,mixed>
+	 *
+	 * @since 0.2.0
 	 */
 	public function to_array(): array {
 		return array(
@@ -125,6 +139,8 @@ final class MigrationSnapshot {
 	 * @param array<string,mixed> $data Stored snapshot data.
 	 * @return self
 	 * @throws InvalidArgumentException When the stored snapshot is incomplete or incompatible.
+	 *
+	 * @since 0.2.0
 	 */
 	public static function from_array( array $data ): self {
 		$required_arrays = array( 'relationships', 'products', 'teachers', 'scripts' );

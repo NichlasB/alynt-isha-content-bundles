@@ -16,6 +16,8 @@ use Alynt\ISHAContentBundles\Value\VideoAccessDecision;
 
 /**
  * Resolves allow, redirect, or deny decisions for direct video requests.
+ *
+ * @since 0.2.0
  */
 final class VideoAccessController {
 
@@ -38,6 +40,8 @@ final class VideoAccessController {
 	 *
 	 * @param EntitlementResolver $entitlement_resolver Entitlement resolver.
 	 * @param VideoRouteProvider  $route_provider       Route provider.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( EntitlementResolver $entitlement_resolver, VideoRouteProvider $route_provider ) {
 		$this->entitlement_resolver = $entitlement_resolver;
@@ -51,6 +55,8 @@ final class VideoAccessController {
 	 * @param int    $video_id    Video post ID.
 	 * @param string $current_url Current request URL, used only for redirect-loop prevention.
 	 * @return VideoAccessDecision
+	 *
+	 * @since 0.2.0
 	 */
 	public function decide( int $user_id, int $video_id, string $current_url = '' ): VideoAccessDecision {
 		if ( $video_id <= 0 ) {

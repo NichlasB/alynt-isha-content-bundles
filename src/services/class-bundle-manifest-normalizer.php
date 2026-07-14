@@ -17,6 +17,8 @@ use Alynt\ISHAContentBundles\Value\BundleManifestSaveResult;
 
 /**
  * Sanitizes and validates explicit teacher bundle manifests.
+ *
+ * @since 0.2.0
  */
 final class BundleManifestNormalizer {
 
@@ -31,6 +33,8 @@ final class BundleManifestNormalizer {
 	 * Create the normalizer.
 	 *
 	 * @param BundleContentProvider $content_provider Content provider.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( BundleContentProvider $content_provider ) {
 		$this->content_provider = $content_provider;
@@ -42,6 +46,8 @@ final class BundleManifestNormalizer {
 	 * @param array<int|string|mixed>|string $raw_video_ids Raw video IDs.
 	 * @param int                            $teacher_id    Expected teacher ID. Zero derives from first video.
 	 * @return BundleManifestSaveResult
+	 *
+	 * @since 0.2.0
 	 */
 	public function normalize( $raw_video_ids, int $teacher_id = 0 ): BundleManifestSaveResult {
 		$parsed              = $this->parse_video_ids( $raw_video_ids );
@@ -53,12 +59,13 @@ final class BundleManifestNormalizer {
 		$manifest_teacher_id = $teacher_id;
 
 		if ( empty( $ids ) ) {
-			return BundleManifestSaveResult::failure( 'empty_manifest', array( 'At least one video ID is required.' ) );
+			return BundleManifestSaveResult::failure( 'empty_manifest', array( __( 'At least one video ID is required.', 'alynt-isha-content-bundles' ) ) );
 		}
 
 		foreach ( $ids as $video_id ) {
 			if ( isset( $seen[ $video_id ] ) ) {
-				$errors[] = sprintf( 'Video ID %d is duplicated.', $video_id );
+				/* translators: %d: Video post ID. */
+				$errors[] = sprintf( __( 'Video ID %d is duplicated.', 'alynt-isha-content-bundles' ), $video_id );
 				continue;
 			}
 
@@ -66,7 +73,8 @@ final class BundleManifestNormalizer {
 			$video             = $this->content_provider->get_video( $video_id );
 
 			if ( null === $video || ! $video->is_storable() ) {
-				$errors[] = sprintf( 'Video ID %d is not a valid storable video.', $video_id );
+				/* translators: %d: Video post ID. */
+				$errors[] = sprintf( __( 'Video ID %d is not a valid storable video.', 'alynt-isha-content-bundles' ), $video_id );
 				continue;
 			}
 
@@ -75,7 +83,8 @@ final class BundleManifestNormalizer {
 			}
 
 			if ( $video->get_teacher_id() !== $manifest_teacher_id ) {
-				$errors[] = sprintf( 'Video ID %d belongs to a different teacher.', $video_id );
+				/* translators: %d: Video post ID. */
+				$errors[] = sprintf( __( 'Video ID %d belongs to a different teacher.', 'alynt-isha-content-bundles' ), $video_id );
 				continue;
 			}
 
@@ -84,7 +93,7 @@ final class BundleManifestNormalizer {
 		}
 
 		if ( 0 === $manifest_teacher_id ) {
-			$errors[] = 'A teacher ID could not be determined from the submitted videos.';
+			$errors[] = __( 'A teacher ID could not be determined from the submitted videos.', 'alynt-isha-content-bundles' );
 		}
 
 		if ( ! empty( $errors ) ) {
@@ -120,7 +129,8 @@ final class BundleManifestNormalizer {
 				continue;
 			}
 
-			$errors[] = sprintf( 'Video ID value "%s" is not a positive integer.', $part );
+			/* translators: %s: Submitted video ID value. */
+			$errors[] = sprintf( __( 'Video ID value "%s" is not a positive integer.', 'alynt-isha-content-bundles' ), $part );
 		}
 
 		return array(

@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Handles activation without migrating or changing site data.
+ *
+ * @since 0.1.0
  */
 final class Activator {
 
@@ -23,6 +25,8 @@ final class Activator {
 	 * explicit, separately approved operations.
 	 *
 	 * @return void
+	 *
+	 * @since 0.1.0
 	 */
 	public static function activate() {
 		// Intentionally empty.

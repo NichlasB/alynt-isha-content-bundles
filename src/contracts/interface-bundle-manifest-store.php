@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\BundleManifest;
 
 /**
  * Persists product-level bundle metadata.
+ *
+ * @since 0.2.0
  */
 interface BundleManifestStore {
 
@@ -24,6 +26,8 @@ interface BundleManifestStore {
 	 * @param int            $product_id Product ID.
 	 * @param BundleManifest $manifest   Manifest to persist.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function save_manifest( int $product_id, BundleManifest $manifest ): void;
 
@@ -32,6 +36,8 @@ interface BundleManifestStore {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function delete_manifest( int $product_id ): void;
 }

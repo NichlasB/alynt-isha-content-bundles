@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Supplies routing facts for protected video access decisions.
+ *
+ * @since 0.2.0
  */
 interface VideoRouteProvider {
 
@@ -21,6 +23,8 @@ interface VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_protected_video( int $video_id ): bool;
 
@@ -29,6 +33,8 @@ interface VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return string|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_redirect_url( int $video_id ): ?string;
 
@@ -37,6 +43,8 @@ interface VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return string|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_unavailable_redirect_url( int $video_id ): ?string;
 }

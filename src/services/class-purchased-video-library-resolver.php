@@ -16,6 +16,8 @@ use Alynt\ISHAContentBundles\Value\LibraryVideo;
 
 /**
  * Resolves entitled video IDs into account-library presentation records.
+ *
+ * @since 0.2.0
  */
 final class PurchasedVideoLibraryResolver {
 
@@ -38,6 +40,8 @@ final class PurchasedVideoLibraryResolver {
 	 *
 	 * @param EntitlementResolver  $entitlement_resolver   Central entitlement resolver.
 	 * @param VideoLibraryProvider $video_library_provider Video presentation provider.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct(
 		EntitlementResolver $entitlement_resolver,
@@ -55,6 +59,8 @@ final class PurchasedVideoLibraryResolver {
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return LibraryVideo[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function resolve_for_user( int $user_id ): array {
 		$videos = array();

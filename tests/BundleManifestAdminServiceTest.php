@@ -256,6 +256,25 @@ final class BundleManifestAdminServiceTest extends TestCase {
 	}
 
 	/**
+	 * Persistence exceptions become a stable admin result.
+	 *
+	 * @return void
+	 */
+	public function test_manifest_store_failure_is_reported_without_an_exception() {
+		$store   = new FakeBundleManifestStore( true );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 100.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'save_failed', $result->get_code() );
+		$this->assertNotEmpty( $result->get_messages() );
+	}
+
+	/**
 	 * Create the service under test.
 	 *
 	 * @param FakeBundleManifestStore $store     Manifest store.

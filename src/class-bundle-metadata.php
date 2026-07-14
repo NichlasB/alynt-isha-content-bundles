@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Defines bundle product metadata and admin form keys.
+ *
+ * @since 0.2.0
  */
 final class BundleMetadata {
 
@@ -38,6 +40,8 @@ final class BundleMetadata {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public static function nonce_action( int $product_id ): string {
 		return self::NONCE_ACTION_PREFIX . $product_id;

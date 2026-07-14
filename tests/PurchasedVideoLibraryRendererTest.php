@@ -30,15 +30,15 @@ final class PurchasedVideoLibraryRendererTest extends TestCase {
 		);
 		$html = ( new PurchasedVideoLibraryRenderer() )->render( array( $video ), true );
 
-		$this->assertStringStartsWith( '<ul class="purchased-videos">', $html );
-		$this->assertStringContainsString( '<li class="video-item">', $html );
+		$this->assertStringStartsWith( '<ul class="purchased-videos alynt-isha-content-bundles__purchased-videos">', $html );
+		$this->assertStringContainsString( '<li class="video-item alynt-isha-content-bundles__video-item">', $html );
 		$this->assertStringContainsString( '<img class="video-thumbnail" src="https://example.test/image.jpg" alt="Herbal Foundations">', $html );
 		$this->assertStringContainsString( '<div class="video-categories"><span>Nutrition | Raw Food</span></div>', $html );
 		$this->assertStringContainsString( '<ul class="video-author-info">', $html );
 		$this->assertStringContainsString( 'avatar avatar-32', $html );
 		$this->assertStringContainsString( '<li>Raw Chef Gail</li>', $html );
 		$this->assertStringContainsString( '<h3>Herbal Foundations</h3>', $html );
-		$this->assertStringContainsString( '<a href="https://example.test/video/herbal-foundations/">Watch</a>', $html );
+		$this->assertStringContainsString( '<a href="https://example.test/video/herbal-foundations/" aria-label="Watch Herbal Foundations">Watch</a>', $html );
 		$this->assertStringEndsWith( '</ul>', $html );
 	}
 
@@ -46,8 +46,8 @@ final class PurchasedVideoLibraryRendererTest extends TestCase {
 	public function test_existing_state_messages_are_preserved() {
 		$renderer = new PurchasedVideoLibraryRenderer();
 
-		$this->assertSame( '<p>Please log in to view your purchased videos.</p>', $renderer->render( array(), false ) );
-		$this->assertSame( '<p>You have not purchased any videos yet.</p>', $renderer->render( array(), true ) );
+		$this->assertSame( '<p class="alynt-isha-content-bundles__notice">Please log in to view your purchased videos.</p>', $renderer->render( array(), false ) );
+		$this->assertSame( '<p class="alynt-isha-content-bundles__notice">You have not purchased any videos yet.</p>', $renderer->render( array(), true ) );
 	}
 
 	/** @return void */
@@ -56,7 +56,7 @@ final class PurchasedVideoLibraryRendererTest extends TestCase {
 		$second = $this->create_video( 10, 'Replacement title' );
 		$html   = ( new PurchasedVideoLibraryRenderer() )->render( array( $first, 'invalid', $second ), true );
 
-		$this->assertSame( 1, substr_count( $html, '<li class="video-item">' ) );
+		$this->assertSame( 1, substr_count( $html, '<li class="video-item alynt-isha-content-bundles__video-item">' ) );
 		$this->assertStringNotContainsString( 'First title', $html );
 		$this->assertStringContainsString( 'Replacement title', $html );
 	}
@@ -79,7 +79,7 @@ final class PurchasedVideoLibraryRendererTest extends TestCase {
 		$this->assertStringContainsString( 'src="https://example.test/image.jpg?size=1&amp;crop=yes"', $html );
 		$this->assertStringContainsString( '<li>Teacher &amp; Guide</li>', $html );
 		$this->assertSame( 1, substr_count( $html, 'Health &lt; Wellness' ) );
-		$this->assertStringContainsString( '<a href="">Watch</a>', $html );
+		$this->assertStringContainsString( '<a href="" aria-label="Watch &lt;script&gt;alert(&quot;title&quot;)&lt;/script&gt;">Watch</a>', $html );
 		$this->assertStringNotContainsString( 'javascript:', $html );
 	}
 

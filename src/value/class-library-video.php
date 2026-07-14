@@ -15,6 +15,8 @@ use InvalidArgumentException;
 
 /**
  * Represents the presentation data for one entitled video.
+ *
+ * @since 0.2.0
  */
 final class LibraryVideo {
 
@@ -88,6 +90,8 @@ final class LibraryVideo {
 	 * @param string[] $categories         Category names.
 	 * @param string   $author_avatar_html Safe avatar HTML.
 	 * @throws InvalidArgumentException When the video ID is invalid.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct(
 		int $id,
@@ -117,6 +121,8 @@ final class LibraryVideo {
 	 * Get the video post ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_id(): int {
 		return $this->id;
@@ -126,6 +132,8 @@ final class LibraryVideo {
 	 * Get the video title.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_title(): string {
 		return $this->title;
@@ -135,6 +143,8 @@ final class LibraryVideo {
 	 * Get the video permalink.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_watch_url(): string {
 		return $this->watch_url;
@@ -144,6 +154,8 @@ final class LibraryVideo {
 	 * Get the featured image URL.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_thumbnail_url(): string {
 		return $this->thumbnail_url;
@@ -153,6 +165,8 @@ final class LibraryVideo {
 	 * Get the author display name.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_author_name(): string {
 		return $this->author_name;
@@ -162,6 +176,8 @@ final class LibraryVideo {
 	 * Get the author email.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_author_email(): string {
 		return $this->author_email;
@@ -171,6 +187,8 @@ final class LibraryVideo {
 	 * Get the category names.
 	 *
 	 * @return string[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_categories(): array {
 		return $this->categories;
@@ -180,6 +198,8 @@ final class LibraryVideo {
 	 * Get safe platform-generated avatar HTML.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_author_avatar_html(): string {
 		return $this->author_avatar_html;

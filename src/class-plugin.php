@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Coordinates plugin services and integrations.
+ *
+ * @since 0.1.0
  */
 final class Plugin {
 
@@ -27,13 +29,20 @@ final class Plugin {
 	 * Start the plugin runtime.
 	 *
 	 * @return void
+	 *
+	 * @since 0.1.0
 	 */
 	public function run() {
 		if ( $this->started ) {
 			return;
 		}
 
-		$this->started     = true;
+		$this->started = true;
+		load_plugin_textdomain(
+			'alynt-isha-content-bundles',
+			false,
+			dirname( ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_BASENAME ) . '/languages'
+		);
 		$catalog_provider  = new Integrations\WordPressCatalogEligibilityProvider();
 		$catalog_policy    = new Services\CatalogEligibilityPolicy( $catalog_provider );
 		$access_provider   = new Integrations\WordPressAccessContentProvider();
@@ -52,13 +61,22 @@ final class Plugin {
 		);
 		$route_provider    = new Integrations\WordPressVideoRouteProvider( $catalog_policy );
 		$runtime           = new Integrations\RuntimeHooks(
-			new Services\VideoAccessController( $entitlements, $route_provider ),
-			$catalog_policy,
-			$library_resolver,
-			new Services\PurchasedVideoLibraryRenderer(),
-			$video_provider,
-			new Services\TeacherVideoRenderer(),
-			$manifest_admin
+			new Integrations\DirectAccessHooks(
+				new Services\VideoAccessController( $entitlements, $route_provider ),
+				$catalog_policy
+			),
+			new Integrations\ShortcodeHooks(
+				$catalog_policy,
+				$library_resolver,
+				new Services\PurchasedVideoLibraryRenderer(),
+				new Integrations\WordPressTeacherVideoLibrary( $catalog_provider, $video_provider ),
+				new Services\TeacherVideoRenderer()
+			),
+			new Integrations\CatalogHooks(
+				$catalog_policy,
+				new Services\TeacherDirectoryContentFilter()
+			),
+			new Integrations\BundleProductAdminHooks( $manifest_admin )
 		);
 		$runtime->register();
 		$video_runtime_admin = new Integrations\VideoRuntimeAdmin();

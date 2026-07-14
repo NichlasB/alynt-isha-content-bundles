@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Describes the result of an attempted manifest admin save.
+ *
+ * @since 0.2.0
  */
 final class BundleManifestSaveResult {
 
@@ -70,6 +72,8 @@ final class BundleManifestSaveResult {
 	 * @param string              $code     Result code.
 	 * @param BundleManifest|null $manifest Manifest, when available.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function success( string $code, ?BundleManifest $manifest = null ): self {
 		return new self( true, $code, array(), $manifest );
@@ -81,6 +85,8 @@ final class BundleManifestSaveResult {
 	 * @param string   $code     Result code.
 	 * @param string[] $messages Messages.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function failure( string $code, array $messages ): self {
 		return new self( false, $code, $messages );
@@ -90,6 +96,8 @@ final class BundleManifestSaveResult {
 	 * Determine whether the operation succeeded.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_success(): bool {
 		return $this->success;
@@ -99,6 +107,8 @@ final class BundleManifestSaveResult {
 	 * Get the result code.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_code(): string {
 		return $this->code;
@@ -108,6 +118,8 @@ final class BundleManifestSaveResult {
 	 * Get messages.
 	 *
 	 * @return string[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_messages(): array {
 		return $this->messages;
@@ -117,6 +129,8 @@ final class BundleManifestSaveResult {
 	 * Get the manifest.
 	 *
 	 * @return BundleManifest|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_manifest(): ?BundleManifest {
 		return $this->manifest;

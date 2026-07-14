@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Describes an apply or rollback outcome without performing output.
+ *
+ * @since 0.2.0
  */
 final class MigrationExecutionResult {
 
@@ -71,6 +73,8 @@ final class MigrationExecutionResult {
 	 * @param int                    $change_count Applied change count.
 	 * @param MigrationSnapshot|null $snapshot     Pre-write rollback snapshot.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function success(
 		string $code,
@@ -85,6 +89,8 @@ final class MigrationExecutionResult {
 	 *
 	 * @param string $code Stable result code.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function failure( string $code ): self {
 		return new self( false, $code );
@@ -94,6 +100,8 @@ final class MigrationExecutionResult {
 	 * Determine whether execution succeeded.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_success(): bool {
 		return $this->success;
@@ -103,6 +111,8 @@ final class MigrationExecutionResult {
 	 * Get the stable result code.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_code(): string {
 		return $this->code;
@@ -112,6 +122,8 @@ final class MigrationExecutionResult {
 	 * Get the applied change count.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_change_count(): int {
 		return $this->change_count;
@@ -121,6 +133,8 @@ final class MigrationExecutionResult {
 	 * Get the pre-write rollback snapshot.
 	 *
 	 * @return MigrationSnapshot|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_snapshot(): ?MigrationSnapshot {
 		return $this->snapshot;

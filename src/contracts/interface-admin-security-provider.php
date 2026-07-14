@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Wraps WordPress capability and nonce checks for testable admin writes.
+ *
+ * @since 0.2.0
  */
 interface AdminSecurityProvider {
 
@@ -22,6 +24,8 @@ interface AdminSecurityProvider {
 	 * @param int    $user_id    WordPress user ID.
 	 * @param string $capability Required capability.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function user_can( int $user_id, string $capability ): bool;
 
@@ -31,6 +35,8 @@ interface AdminSecurityProvider {
 	 * @param string $nonce  Submitted nonce.
 	 * @param string $action Expected action.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function verify_nonce( string $nonce, string $action ): bool;
 }

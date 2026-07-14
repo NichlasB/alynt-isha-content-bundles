@@ -16,6 +16,8 @@ use Alynt\ISHAContentBundles\Value\BundleManifest;
 
 /**
  * Decides which managed offers can be purchased or publicly discovered.
+ *
+ * @since 0.2.0
  */
 final class CatalogEligibilityPolicy {
 
@@ -30,6 +32,8 @@ final class CatalogEligibilityPolicy {
 	 * Create the catalog policy.
 	 *
 	 * @param CatalogEligibilityProvider $provider Catalog relationship provider.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( CatalogEligibilityProvider $provider ) {
 		$this->provider = $provider;
@@ -43,6 +47,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_product_discoverable( int $product_id ): bool {
 		if ( $product_id <= 0 || $this->provider->is_legacy_product( $product_id ) ) {
@@ -64,6 +70,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $product_id Product ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function should_block_purchase( int $product_id ): bool {
 		if ( $product_id <= 0 || $this->provider->is_legacy_product( $product_id ) ) {
@@ -82,6 +90,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $teacher_id Teacher owner ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_teacher_discoverable( int $teacher_id ): bool {
 		return null !== $this->get_available_bundle_product_id_for_teacher( $teacher_id );
@@ -92,6 +102,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_video_discoverable( int $video_id ): bool {
 		return null !== $this->get_available_bundle_product_id_for_video( $video_id );
@@ -102,6 +114,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $teacher_id Teacher owner ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_available_bundle_product_id_for_teacher( int $teacher_id ): ?int {
 		if ( $teacher_id <= 0 ) {
@@ -128,6 +142,8 @@ final class CatalogEligibilityPolicy {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_available_bundle_product_id_for_video( int $video_id ): ?int {
 		if ( $video_id <= 0 ) {

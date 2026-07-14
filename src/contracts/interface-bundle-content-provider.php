@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\BundleVideo;
 
 /**
  * Supplies video facts needed to validate bundle manifests.
+ *
+ * @since 0.2.0
  */
 interface BundleContentProvider {
 
@@ -23,6 +25,8 @@ interface BundleContentProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return BundleVideo|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video( int $video_id ): ?BundleVideo;
 }

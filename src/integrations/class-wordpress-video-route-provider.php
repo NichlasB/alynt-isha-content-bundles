@@ -18,6 +18,8 @@ use Alynt\ISHAContentBundles\SiteDefinition;
 
 /**
  * Supplies protected routes and approved redirect destinations.
+ *
+ * @since 0.2.0
  */
 final class WordPressVideoRouteProvider implements VideoRouteProvider {
 
@@ -32,6 +34,8 @@ final class WordPressVideoRouteProvider implements VideoRouteProvider {
 	 * Create the route provider.
 	 *
 	 * @param CatalogEligibilityPolicy $catalog_policy Catalog policy.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( CatalogEligibilityPolicy $catalog_policy ) {
 		$this->catalog_policy = $catalog_policy;
@@ -42,6 +46,8 @@ final class WordPressVideoRouteProvider implements VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_protected_video( int $video_id ): bool {
 		return SiteDefinition::VIDEO_POST_TYPE === get_post_type( $video_id )
@@ -53,6 +59,8 @@ final class WordPressVideoRouteProvider implements VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return string|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_redirect_url( int $video_id ): ?string {
 		$product_id = $this->catalog_policy->get_available_bundle_product_id_for_video( $video_id );
@@ -66,6 +74,8 @@ final class WordPressVideoRouteProvider implements VideoRouteProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return string|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_unavailable_redirect_url( int $video_id ): ?string {
 		$url = '';

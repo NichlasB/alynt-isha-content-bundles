@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\MigrationSnapshot;
 
 /**
  * Reads migration state and performs exact approval-gated replacements.
+ *
+ * @since 0.2.0
  */
 interface MigrationStore {
 
@@ -23,6 +25,8 @@ interface MigrationStore {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return string[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_relationship_values( int $video_id ): array;
 
@@ -32,6 +36,8 @@ interface MigrationStore {
 	 * @param int      $video_id Video post ID.
 	 * @param string[] $values   Exact replacement values.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function replace_relationship_values( int $video_id, array $values ): void;
 
@@ -42,6 +48,8 @@ interface MigrationStore {
 	 * teachers, and Advanced Scripts state before returning the snapshot.
 	 *
 	 * @return MigrationSnapshot
+	 *
+	 * @since 0.2.0
 	 */
 	public function capture_snapshot(): MigrationSnapshot;
 
@@ -50,6 +58,8 @@ interface MigrationStore {
 	 *
 	 * @param MigrationSnapshot $snapshot Rollback snapshot.
 	 * @return void
+	 *
+	 * @since 0.2.0
 	 */
 	public function restore_snapshot( MigrationSnapshot $snapshot ): void;
 
@@ -58,6 +68,8 @@ interface MigrationStore {
 	 *
 	 * @param MigrationSnapshot $snapshot Rollback snapshot.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function snapshot_matches( MigrationSnapshot $snapshot ): bool;
 }

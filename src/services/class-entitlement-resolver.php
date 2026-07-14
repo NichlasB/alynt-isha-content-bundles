@@ -18,6 +18,8 @@ use Alynt\ISHAContentBundles\Value\Purchase;
 
 /**
  * Resolves administrator, legacy-product, and bundle-product access.
+ *
+ * @since 0.2.0
  */
 final class EntitlementResolver {
 
@@ -48,6 +50,8 @@ final class EntitlementResolver {
 	 * @param UserAccessProvider $user_access_provider User access provider.
 	 * @param PurchaseProvider   $purchase_provider    Purchase provider.
 	 * @param ContentMapProvider $content_map_provider Content map provider.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct(
 		UserAccessProvider $user_access_provider,
@@ -65,6 +69,8 @@ final class EntitlementResolver {
 	 * @param int $user_id  WordPress user ID.
 	 * @param int $video_id Video post ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function can_access_video( int $user_id, int $video_id ): bool {
 		if ( $user_id <= 0 || $video_id <= 0 ) {
@@ -83,6 +89,8 @@ final class EntitlementResolver {
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function resolve_video_ids( int $user_id ): array {
 		if ( $user_id <= 0 ) {

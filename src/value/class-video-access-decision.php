@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Describes how a WordPress adapter should handle a video request.
+ *
+ * @since 0.2.0
  */
 final class VideoAccessDecision {
 
@@ -59,6 +61,8 @@ final class VideoAccessDecision {
 	 *
 	 * @param string $code Reason code.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function allow( string $code ): self {
 		return new self( self::ACTION_ALLOW, $code );
@@ -70,6 +74,8 @@ final class VideoAccessDecision {
 	 * @param string $code         Reason code.
 	 * @param string $redirect_url Redirect URL.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function redirect( string $code, string $redirect_url ): self {
 		return new self( self::ACTION_REDIRECT, $code, $redirect_url );
@@ -80,6 +86,8 @@ final class VideoAccessDecision {
 	 *
 	 * @param string $code Reason code.
 	 * @return self
+	 *
+	 * @since 0.2.0
 	 */
 	public static function deny( string $code ): self {
 		return new self( self::ACTION_DENY, $code );
@@ -89,6 +97,8 @@ final class VideoAccessDecision {
 	 * Get the decision action.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_action(): string {
 		return $this->action;
@@ -98,6 +108,8 @@ final class VideoAccessDecision {
 	 * Get the reason code.
 	 *
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_code(): string {
 		return $this->code;
@@ -107,6 +119,8 @@ final class VideoAccessDecision {
 	 * Get the redirect URL.
 	 *
 	 * @return string|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_redirect_url(): ?string {
 		return $this->redirect_url;
@@ -116,6 +130,8 @@ final class VideoAccessDecision {
 	 * Determine whether the request may proceed.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_allowed(): bool {
 		return self::ACTION_ALLOW === $this->action;
@@ -125,6 +141,8 @@ final class VideoAccessDecision {
 	 * Determine whether the request should redirect.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_redirect(): bool {
 		return self::ACTION_REDIRECT === $this->action;
@@ -134,6 +152,8 @@ final class VideoAccessDecision {
 	 * Determine whether the request should be denied without redirecting.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_denied(): bool {
 		return self::ACTION_DENY === $this->action;

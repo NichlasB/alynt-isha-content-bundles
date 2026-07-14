@@ -2,6 +2,8 @@
 
 `Plugin::run()` composes the tested policy services with WordPress and WooCommerce adapters after all plugins load. Activation, deactivation, and uninstall do not write data.
 
+`RuntimeHooks` is a small coordinator. Direct route access, shortcode rendering, catalog/discovery policy, and WooCommerce bundle administration are registered by separate focused adapters. Request-local caches prevent repeated product-manifest, teacher-bundle, video-owner, and completed-purchase reads during a single page request. Teacher pages query only the published videos in the teacher's explicit manifest rather than scanning every video by that author.
+
 ## Hook Order
 
 - `template_redirect` priority `1`: decide protected-video access and block direct visits to unavailable managed products before the active legacy access script can redirect.
@@ -31,3 +33,5 @@ Initial inactive deployment is safe because no plugin code runs until activation
 - `alynt_isha_content_bundles_blocked_product_url` changes the destination for direct visits to retired or nonqualifying products.
 
 Both defaults remain same-site and use `wp_safe_redirect()`.
+
+See [`HOOKS.md`](HOOKS.md) for argument details, examples, and compatibility policy.

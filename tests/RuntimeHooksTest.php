@@ -7,12 +7,12 @@
 
 namespace Alynt\ISHAContentBundles\Tests;
 
-use Alynt\ISHAContentBundles\Integrations\RuntimeHooks;
+use Alynt\ISHAContentBundles\Integrations\CatalogHooks;
 use Alynt\ISHAContentBundles\Services\CatalogEligibilityPolicy;
+use Alynt\ISHAContentBundles\Services\TeacherDirectoryContentFilter;
 use Alynt\ISHAContentBundles\Tests\Support\FakeCatalogEligibilityProvider;
 use Alynt\ISHAContentBundles\Value\BundleManifest;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 /**
  * Verifies policy decisions are translated to WooCommerce and query results.
@@ -74,9 +74,9 @@ final class RuntimeHooksTest extends TestCase {
 	/**
 	 * Build a hook controller with only its catalog dependency initialized.
 	 *
-	 * @return RuntimeHooks
+	 * @return CatalogHooks
 	 */
-	private function create_hooks(): RuntimeHooks {
+	private function create_hooks(): CatalogHooks {
 		$provider = new FakeCatalogEligibilityProvider(
 			array( 504 ),
 			array( 100, 101 ),
@@ -87,15 +87,10 @@ final class RuntimeHooksTest extends TestCase {
 			array( 6 => 100, 4 => 101 ),
 			array( 705 => 6, 500 => 4 )
 		);
-		$class    = new ReflectionClass( RuntimeHooks::class );
-		$hooks    = $class->newInstanceWithoutConstructor();
-		$property = $class->getProperty( 'catalog_policy' );
-		if ( PHP_VERSION_ID < 80100 ) {
-			$property->setAccessible( true );
-		}
-		$property->setValue( $hooks, new CatalogEligibilityPolicy( $provider ) );
-
-		return $hooks;
+		return new CatalogHooks(
+			new CatalogEligibilityPolicy( $provider ),
+			new TeacherDirectoryContentFilter()
+		);
 	}
 
 	/**

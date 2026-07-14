@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Loads runtime classes without requiring Composer on production.
+ *
+ * @since 0.1.0
  */
 final class Loader {
 
@@ -20,6 +22,8 @@ final class Loader {
 	 * Load the plugin classes.
 	 *
 	 * @return void
+	 *
+	 * @since 0.1.0
 	 */
 	public static function load() {
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/class-activator.php';
@@ -64,9 +68,16 @@ final class Loader {
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-bundle-manifest-store.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-video-library-provider.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-catalog-eligibility-provider.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-teacher-video-library.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-video-route-provider.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-post-state-store.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-term-state-store.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-wordpress-migration-store.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-migration-command.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-direct-access-hooks.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-shortcode-hooks.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-catalog-hooks.php';
+		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-bundle-product-admin-hooks.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-runtime-hooks.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/integrations/class-video-runtime-admin.php';
 		require_once ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR . 'src/class-plugin.php';

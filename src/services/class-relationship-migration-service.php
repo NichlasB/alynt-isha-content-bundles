@@ -21,6 +21,8 @@ use Throwable;
 
 /**
  * Previews, applies, verifies, and rolls back exact relationship cleanup.
+ *
+ * @since 0.2.0
  */
 final class RelationshipMigrationService {
 
@@ -35,6 +37,8 @@ final class RelationshipMigrationService {
 	 * Create the migration service.
 	 *
 	 * @param MigrationStore $store Migration state store.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( MigrationStore $store ) {
 		$this->store = $store;
@@ -47,6 +51,8 @@ final class RelationshipMigrationService {
 	 * drift conflict and prevents apply mode.
 	 *
 	 * @return MigrationPlan
+	 *
+	 * @since 0.2.0
 	 */
 	public function preview(): MigrationPlan {
 		$baseline  = MigrationDefinition::baseline_relationships();
@@ -82,6 +88,8 @@ final class RelationshipMigrationService {
 	 *
 	 * @param MigrationPlan $approved_plan Previously reviewed preview.
 	 * @return MigrationExecutionResult
+	 *
+	 * @since 0.2.0
 	 */
 	public function apply( MigrationPlan $approved_plan ): MigrationExecutionResult {
 		$fresh_plan = $this->preview();
@@ -130,6 +138,8 @@ final class RelationshipMigrationService {
 	 *
 	 * @param MigrationSnapshot $snapshot Rollback snapshot.
 	 * @return MigrationExecutionResult
+	 *
+	 * @since 0.2.0
 	 */
 	public function rollback( MigrationSnapshot $snapshot ): MigrationExecutionResult {
 		try {

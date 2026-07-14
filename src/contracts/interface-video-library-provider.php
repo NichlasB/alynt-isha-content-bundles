@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\Value\LibraryVideo;
 
 /**
  * Supplies presentation data for entitled videos.
+ *
+ * @since 0.2.0
  */
 interface VideoLibraryProvider {
 
@@ -23,6 +25,8 @@ interface VideoLibraryProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return LibraryVideo|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video( int $video_id ): ?LibraryVideo;
 }

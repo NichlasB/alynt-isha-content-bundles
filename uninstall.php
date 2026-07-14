@@ -9,4 +9,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Version 0.1.0 owns no persistent data, so uninstall intentionally removes nothing.
+// Preserve bundle manifests, verified runtimes, legacy relationships, and the
+// latest migration snapshot so uninstall cannot silently destroy entitlements
+// or rollback evidence. Administrators may remove those records only through a
+// separately reviewed, site-specific data-retirement procedure.

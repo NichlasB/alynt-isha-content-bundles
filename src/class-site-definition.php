@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Holds the non-sensitive IDs and verified runtimes approved for launch.
+ *
+ * @since 0.2.0
  */
 final class SiteDefinition {
 
@@ -35,6 +37,8 @@ final class SiteDefinition {
 	 * per-video runtime meta value takes precedence for future content.
 	 *
 	 * @return array<int,float>
+	 *
+	 * @since 0.2.0
 	 */
 	public static function video_runtimes(): array {
 		return array(
@@ -62,6 +66,8 @@ final class SiteDefinition {
 	 * Get teacher post IDs keyed by their WordPress author IDs.
 	 *
 	 * @return array<int,int>
+	 *
+	 * @since 0.2.0
 	 */
 	public static function teacher_posts_by_author(): array {
 		return array(
@@ -78,6 +84,8 @@ final class SiteDefinition {
 	 *
 	 * @param int $teacher_post_id Teacher post ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public static function get_teacher_author_id( int $teacher_post_id ): ?int {
 		$author_id = array_search( $teacher_post_id, self::teacher_posts_by_author(), true );

@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Maps purchased products to their entitled video content.
+ *
+ * @since 0.2.0
  */
 interface ContentMapProvider {
 
@@ -21,6 +23,8 @@ interface ContentMapProvider {
 	 *
 	 * @param int $product_id WooCommerce product ID.
 	 * @return int|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_legacy_video_id( int $product_id ): ?int;
 
@@ -29,6 +33,8 @@ interface ContentMapProvider {
 	 *
 	 * @param int $product_id WooCommerce product ID.
 	 * @return array<int|string|mixed>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_bundle_video_ids( int $product_id ): array;
 
@@ -36,6 +42,8 @@ interface ContentMapProvider {
 	 * Get all videos available to administrators.
 	 *
 	 * @return array<int|string|mixed>
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_all_video_ids(): array;
 }

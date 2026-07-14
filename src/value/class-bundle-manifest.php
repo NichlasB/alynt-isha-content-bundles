@@ -15,6 +15,8 @@ use Alynt\ISHAContentBundles\BundleMetadata;
 
 /**
  * Represents a normalized teacher bundle manifest.
+ *
+ * @since 0.2.0
  */
 final class BundleManifest {
 
@@ -45,6 +47,8 @@ final class BundleManifest {
 	 * @param int   $teacher_id       Teacher ID.
 	 * @param int[] $video_ids        Included video IDs.
 	 * @param float $runtime_seconds  Aggregate runtime in seconds.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( int $teacher_id, array $video_ids, float $runtime_seconds ) {
 		$this->teacher_id      = $teacher_id;
@@ -56,6 +60,8 @@ final class BundleManifest {
 	 * Get the teacher ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_teacher_id(): int {
 		return $this->teacher_id;
@@ -65,6 +71,8 @@ final class BundleManifest {
 	 * Get the included video IDs.
 	 *
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video_ids(): array {
 		return $this->video_ids;
@@ -74,6 +82,8 @@ final class BundleManifest {
 	 * Get the aggregate runtime in seconds.
 	 *
 	 * @return float
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_runtime_seconds(): float {
 		return $this->runtime_seconds;
@@ -83,6 +93,8 @@ final class BundleManifest {
 	 * Determine whether the manifest reaches the approved cutoff.
 	 *
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function qualifies(): bool {
 		return $this->runtime_seconds >= BundleMetadata::QUALIFYING_SECONDS;

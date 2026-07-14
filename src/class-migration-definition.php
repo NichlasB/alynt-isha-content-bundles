@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Defines the approved T3 legacy relationship baseline and snapshot scope.
+ *
+ * @since 0.2.0
  */
 final class MigrationDefinition {
 
@@ -20,6 +22,8 @@ final class MigrationDefinition {
 	 * Get the canonical video-to-legacy-product map.
 	 *
 	 * @return array<int,int>
+	 *
+	 * @since 0.2.0
 	 */
 	public static function legacy_product_map(): array {
 		return array(
@@ -47,6 +51,8 @@ final class MigrationDefinition {
 	 * Get the exact T3 relationship-row values before cleanup.
 	 *
 	 * @return array<int,string[]>
+	 *
+	 * @since 0.2.0
 	 */
 	public static function baseline_relationships(): array {
 		$baseline = self::target_relationships();
@@ -63,6 +69,8 @@ final class MigrationDefinition {
 	 * Get normalized relationship-row values.
 	 *
 	 * @return array<int,string[]>
+	 *
+	 * @since 0.2.0
 	 */
 	public static function target_relationships(): array {
 		$targets = array();
@@ -78,6 +86,8 @@ final class MigrationDefinition {
 	 * Get legacy products that must remain snapshot-protected.
 	 *
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public static function legacy_product_ids(): array {
 		return array_values( self::legacy_product_map() );
@@ -87,6 +97,8 @@ final class MigrationDefinition {
 	 * Get teacher posts that must remain snapshot-protected.
 	 *
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public static function teacher_post_ids(): array {
 		return array( 333, 385, 441, 443, 1106 );
@@ -96,6 +108,8 @@ final class MigrationDefinition {
 	 * Get Advanced Scripts terms that must remain snapshot-protected.
 	 *
 	 * @return int[]
+	 *
+	 * @since 0.2.0
 	 */
 	public static function script_term_ids(): array {
 		return array( 44, 45, 51, 54 );

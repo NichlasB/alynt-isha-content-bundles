@@ -17,6 +17,8 @@ use DOMXPath;
 
 /**
  * Removes blocked teacher cards from a compiled Brizy Posts snapshot.
+ *
+ * @since 0.2.0
  */
 final class TeacherDirectoryContentFilter {
 
@@ -26,6 +28,8 @@ final class TeacherDirectoryContentFilter {
 	 * @param string   $content      Compiled page content.
 	 * @param string[] $blocked_urls Teacher permalinks to remove.
 	 * @return string
+	 *
+	 * @since 0.2.0
 	 */
 	public function filter( string $content, array $blocked_urls ): string {
 		$blocked = array();

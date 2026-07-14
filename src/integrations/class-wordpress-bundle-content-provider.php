@@ -17,6 +17,8 @@ use Alynt\ISHAContentBundles\Value\BundleVideo;
 
 /**
  * Supplies verified WordPress video facts for manifest validation.
+ *
+ * @since 0.2.0
  */
 final class WordPressBundleContentProvider implements BundleContentProvider {
 
@@ -25,6 +27,8 @@ final class WordPressBundleContentProvider implements BundleContentProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return BundleVideo|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video( int $video_id ): ?BundleVideo {
 		$post = get_post( $video_id );

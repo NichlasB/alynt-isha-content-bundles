@@ -15,6 +15,8 @@ use InvalidArgumentException;
 
 /**
  * Represents one exact video relationship replacement.
+ *
+ * @since 0.2.0
  */
 final class RelationshipMigrationChange {
 
@@ -46,6 +48,8 @@ final class RelationshipMigrationChange {
 	 * @param string[] $before_values Expected current row values.
 	 * @param string[] $after_values  Replacement row values.
 	 * @throws InvalidArgumentException When the video ID is invalid.
+	 *
+	 * @since 0.2.0
 	 */
 	public function __construct( int $video_id, array $before_values, array $after_values ) {
 		if ( $video_id <= 0 ) {
@@ -61,6 +65,8 @@ final class RelationshipMigrationChange {
 	 * Get the video post ID.
 	 *
 	 * @return int
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video_id(): int {
 		return $this->video_id;
@@ -70,6 +76,8 @@ final class RelationshipMigrationChange {
 	 * Get expected current row values.
 	 *
 	 * @return string[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_before_values(): array {
 		return $this->before_values;
@@ -79,6 +87,8 @@ final class RelationshipMigrationChange {
 	 * Get replacement row values.
 	 *
 	 * @return string[]
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_after_values(): array {
 		return $this->after_values;
@@ -88,6 +98,8 @@ final class RelationshipMigrationChange {
 	 * Export the change for previews or serialization.
 	 *
 	 * @return array{video_id:int,before:string[],after:string[]}
+	 *
+	 * @since 0.2.0
 	 */
 	public function to_array(): array {
 		return array(

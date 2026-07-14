@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Supplies user-level access facts to the entitlement resolver.
+ *
+ * @since 0.2.0
  */
 interface UserAccessProvider {
 
@@ -21,6 +23,8 @@ interface UserAccessProvider {
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return bool
+	 *
+	 * @since 0.2.0
 	 */
 	public function is_administrator( int $user_id ): bool;
 }

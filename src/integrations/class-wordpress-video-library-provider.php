@@ -17,6 +17,8 @@ use Alynt\ISHAContentBundles\Value\LibraryVideo;
 
 /**
  * Builds account-library presentation records from WordPress posts.
+ *
+ * @since 0.2.0
  */
 final class WordPressVideoLibraryProvider implements VideoLibraryProvider {
 
@@ -25,6 +27,8 @@ final class WordPressVideoLibraryProvider implements VideoLibraryProvider {
 	 *
 	 * @param int $video_id Video post ID.
 	 * @return LibraryVideo|null
+	 *
+	 * @since 0.2.0
 	 */
 	public function get_video( int $video_id ): ?LibraryVideo {
 		$post = get_post( $video_id );
@@ -47,6 +51,23 @@ final class WordPressVideoLibraryProvider implements VideoLibraryProvider {
 
 		$email = (string) get_the_author_meta( 'user_email', $author_id );
 
+		$avatar = wp_kses(
+			(string) get_avatar( $email, 32 ),
+			array(
+				'img' => array(
+					'alt'      => true,
+					'class'    => true,
+					'decoding' => true,
+					'height'   => true,
+					'loading'  => true,
+					'sizes'    => true,
+					'src'      => true,
+					'srcset'   => true,
+					'width'    => true,
+				),
+			)
+		);
+
 		return new LibraryVideo(
 			$video_id,
 			(string) get_the_title( $video_id ),
@@ -55,7 +76,7 @@ final class WordPressVideoLibraryProvider implements VideoLibraryProvider {
 			(string) get_the_author_meta( 'display_name', $author_id ),
 			$email,
 			$categories,
-			(string) get_avatar( $email, 32 )
+			$avatar
 		);
 	}
 }

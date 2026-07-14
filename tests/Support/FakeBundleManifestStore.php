@@ -15,6 +15,18 @@ use Alynt\ISHAContentBundles\Value\BundleManifest;
  */
 final class FakeBundleManifestStore implements BundleManifestStore {
 
+	/** @var bool */
+	private $fail_writes;
+
+	/**
+	 * Create the store.
+	 *
+	 * @param bool $fail_writes Whether persistence should throw.
+	 */
+	public function __construct( bool $fail_writes = false ) {
+		$this->fail_writes = $fail_writes;
+	}
+
 	/**
 	 * Saved manifests keyed by product ID.
 	 *
@@ -37,6 +49,9 @@ final class FakeBundleManifestStore implements BundleManifestStore {
 	 * @return void
 	 */
 	public function save_manifest( int $product_id, BundleManifest $manifest ): void {
+		if ( $this->fail_writes ) {
+			throw new \RuntimeException( 'Simulated save failure.' );
+		}
 		$this->saved[ $product_id ] = $manifest;
 	}
 
@@ -47,6 +62,9 @@ final class FakeBundleManifestStore implements BundleManifestStore {
 	 * @return void
 	 */
 	public function delete_manifest( int $product_id ): void {
+		if ( $this->fail_writes ) {
+			throw new \RuntimeException( 'Simulated delete failure.' );
+		}
 		$this->deleted[] = $product_id;
 		unset( $this->saved[ $product_id ] );
 	}
