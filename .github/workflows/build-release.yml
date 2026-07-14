@@ -26,6 +26,7 @@ jobs:
                     --exclude='build' \
                     --exclude='vendor' \
                     --exclude='tests' \
+                    --exclude='docs' \
                     --exclude='coverage' \
                     --exclude='.editorconfig' \
                     --exclude='.gitattributes' \
@@ -45,6 +46,12 @@ jobs:
                     --exclude='*.map' \
                     --exclude='*.tmp.md' \
                     ./ "build/${PLUGIN_SLUG}/"
+          for excluded_path in docs vendor tests .git .github; do
+            if [ -e "build/${PLUGIN_SLUG}/${excluded_path}" ]; then
+              echo "Unexpected release path: ${excluded_path}" >&2
+              exit 1
+            fi
+          done
           cd build
           zip -r "${PLUGIN_SLUG}-${VERSION}.zip" "${PLUGIN_SLUG}"
           echo "zip_file=build/${PLUGIN_SLUG}-${VERSION}.zip" >> "$GITHUB_OUTPUT"
