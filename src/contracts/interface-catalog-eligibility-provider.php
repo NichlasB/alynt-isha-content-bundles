@@ -51,14 +51,14 @@ interface CatalogEligibilityProvider {
 	public function get_bundle_manifest( int $product_id ): ?BundleManifest;
 
 	/**
-	 * Get the bundle product assigned to a teacher owner.
+	 * Get published bundle products assigned to a teacher owner.
 	 *
 	 * @param int $teacher_id Teacher owner ID.
-	 * @return int|null
+	 * @return int[]
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
-	public function get_bundle_product_id_for_teacher( int $teacher_id ): ?int;
+	public function get_bundle_product_ids_for_teacher( int $teacher_id ): array;
 
 	/**
 	 * Get the teacher owner assigned to a video.

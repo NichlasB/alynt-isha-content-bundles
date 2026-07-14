@@ -92,6 +92,60 @@ final class CatalogEligibilityPolicyTest extends TestCase {
 	}
 
 	/**
+	 * Multiple qualifying bundles for one teacher remain independently available.
+	 *
+	 * @return void
+	 */
+	public function test_teacher_can_have_multiple_qualifying_bundles() {
+		$provider = new FakeCatalogEligibilityProvider(
+			array(),
+			array( 600, 601, 602 ),
+			array(
+				600 => new BundleManifest( 6, array( 60, 61 ), 3600.0 ),
+				601 => new BundleManifest( 6, array( 62 ), 3540.0 ),
+				602 => new BundleManifest( 6, array( 63 ), 3539.999 ),
+			),
+			array( 6 => array( 600, 601, 602 ) ),
+			array( 60 => 6, 61 => 6, 62 => 6, 63 => 6 )
+		);
+		$policy = new CatalogEligibilityPolicy( $provider );
+
+		$this->assertSame( array( 600, 601 ), $policy->get_available_bundle_product_ids_for_teacher( 6 ) );
+		$this->assertSame( 600, $policy->get_available_bundle_product_id_for_teacher( 6 ) );
+		$this->assertTrue( $policy->is_teacher_discoverable( 6 ) );
+		$this->assertFalse( $policy->should_block_purchase( 600 ) );
+		$this->assertFalse( $policy->should_block_purchase( 601 ) );
+		$this->assertTrue( $policy->should_block_purchase( 602 ) );
+		$this->assertSame( 600, $policy->get_available_bundle_product_id_for_video( 60 ) );
+		$this->assertSame( 601, $policy->get_available_bundle_product_id_for_video( 62 ) );
+		$this->assertNull( $policy->get_available_bundle_product_id_for_video( 63 ) );
+	}
+
+	/**
+	 * A video assigned to two qualifying bundles fails closed for public routing.
+	 *
+	 * @return void
+	 */
+	public function test_overlapping_qualifying_manifests_fail_closed_for_video_routing() {
+		$provider = new FakeCatalogEligibilityProvider(
+			array(),
+			array( 700, 701 ),
+			array(
+				700 => new BundleManifest( 7, array( 70 ), 3600.0 ),
+				701 => new BundleManifest( 7, array( 70, 71 ), 3600.0 ),
+			),
+			array( 7 => array( 700, 701 ) ),
+			array( 70 => 7, 71 => 7 )
+		);
+		$policy = new CatalogEligibilityPolicy( $provider );
+
+		$this->assertTrue( $policy->is_teacher_discoverable( 7 ) );
+		$this->assertFalse( $policy->is_video_discoverable( 70 ) );
+		$this->assertNull( $policy->get_available_bundle_product_id_for_video( 70 ) );
+		$this->assertSame( 701, $policy->get_available_bundle_product_id_for_video( 71 ) );
+	}
+
+	/**
 	 * The cutoff is inclusive and video count cannot replace runtime.
 	 *
 	 * @return void

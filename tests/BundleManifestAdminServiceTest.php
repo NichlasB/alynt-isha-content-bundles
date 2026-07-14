@@ -13,6 +13,7 @@ use Alynt\ISHAContentBundles\Services\BundleManifestNormalizer;
 use Alynt\ISHAContentBundles\Tests\Support\FakeAdminSecurityProvider;
 use Alynt\ISHAContentBundles\Tests\Support\FakeBundleContentProvider;
 use Alynt\ISHAContentBundles\Tests\Support\FakeBundleManifestStore;
+use Alynt\ISHAContentBundles\Value\BundleManifest;
 use Alynt\ISHAContentBundles\Value\BundleVideo;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +47,164 @@ final class BundleManifestAdminServiceTest extends TestCase {
 		$this->assertSame( array( 10, 20 ), $manifest->get_video_ids() );
 		$this->assertSame( 3600.5, $manifest->get_runtime_seconds() );
 		$this->assertTrue( $manifest->qualifies() );
+	}
+
+	/**
+	 * Appending to a sold bundle does not require removal confirmation.
+	 *
+	 * @return void
+	 */
+	public function test_sold_bundle_can_receive_appended_videos() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10 ), 3540.0 ) );
+		$store->set_completed_order_count( 200, 3 );
+		$service = $this->create_service(
+			$store,
+			array(
+				10 => new BundleVideo( 10, 7, 'publish', 3540.0 ),
+				20 => new BundleVideo( 20, 7, 'publish', 600.0 ),
+			)
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10, 20', 7 ) );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertSame( array( 10, 20 ), $store->get_saved_manifest( 200 )->get_video_ids() );
+		$this->assertSame( array(), $store->get_audits( 200 ) );
+	}
+
+	/**
+	 * Removing sold-bundle content requires confirmation and a reason.
+	 *
+	 * @return void
+	 */
+	public function test_sold_bundle_removal_requires_confirmation_and_reason() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10, 20 ), 4140.0 ) );
+		$store->set_completed_order_count( 200, 3 );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'removal_confirmation_required', $result->get_code() );
+		$this->assertSame( array( 10, 20 ), $store->get_saved_manifest( 200 )->get_video_ids() );
+		$this->assertSame( array(), $store->get_audits( 200 ) );
+	}
+
+	/**
+	 * Confirmed sold-bundle removals are saved and audited.
+	 *
+	 * @return void
+	 */
+	public function test_confirmed_sold_bundle_removal_is_audited() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10, 20 ), 4140.0 ) );
+		$store->set_completed_order_count( 200, 3 );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+		$request = $this->request( '10', 7 );
+		$request[ BundleMetadata::FIELD_REMOVAL_CONFIRMED ] = '1';
+		$request[ BundleMetadata::FIELD_REMOVAL_REASON ]    = 'Replace an incorrect lesson.';
+
+		$result = $service->save_from_request( 200, 1, $request );
+		$audits = $store->get_audits( 200 );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertSame( array( 10 ), $store->get_saved_manifest( 200 )->get_video_ids() );
+		$this->assertCount( 1, $audits );
+		$this->assertSame( array( 20 ), $audits[0]['removed_video_ids'] );
+		$this->assertSame( 3, $audits[0]['completed_order_count'] );
+		$this->assertSame( 'Replace an incorrect lesson.', $audits[0]['reason'] );
+	}
+
+	/**
+	 * Unsold bundles can be reorganized without sold-bundle confirmation.
+	 *
+	 * @return void
+	 */
+	public function test_unsold_bundle_can_remove_videos_without_confirmation() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10, 20 ), 4140.0 ) );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertSame( array( 10 ), $store->get_saved_manifest( 200 )->get_video_ids() );
+		$this->assertSame( array(), $store->get_audits( 200 ) );
+	}
+
+	/**
+	 * Videos cannot be assigned to more than one managed bundle.
+	 *
+	 * @return void
+	 */
+	public function test_cross_bundle_video_assignment_is_rejected() {
+		$store = new FakeBundleManifestStore();
+		$store->set_conflicts( array( 10 => array( 300 ) ) );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'duplicate_assignment', $result->get_code() );
+		$this->assertSame( 0, $store->count_saved() );
+	}
+
+	/**
+	 * Assignment-check failures prevent unverified manifest changes.
+	 *
+	 * @return void
+	 */
+	public function test_cross_bundle_assignment_check_failure_is_reported() {
+		$store = new FakeBundleManifestStore();
+		$store->fail_conflict_checks();
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'conflict_check_failed', $result->get_code() );
+		$this->assertSame( 0, $store->count_saved() );
+	}
+
+	/**
+	 * An audit failure restores the previous sold-bundle manifest.
+	 *
+	 * @return void
+	 */
+	public function test_audit_failure_restores_previous_manifest() {
+		$store = new FakeBundleManifestStore( false, true );
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10, 20 ), 4140.0 ) );
+		$store->set_completed_order_count( 200, 3 );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+		$request = $this->request( '10', 7 );
+		$request[ BundleMetadata::FIELD_REMOVAL_CONFIRMED ] = '1';
+		$request[ BundleMetadata::FIELD_REMOVAL_REASON ]    = 'Remove an incorrect lesson.';
+
+		$result = $service->save_from_request( 200, 1, $request );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'audit_failed', $result->get_code() );
+		$this->assertSame( array( 10, 20 ), $store->get_saved_manifest( 200 )->get_video_ids() );
 	}
 
 	/**
@@ -253,6 +412,78 @@ final class BundleManifestAdminServiceTest extends TestCase {
 		$this->assertTrue( $result->is_success() );
 		$this->assertSame( 'deleted', $result->get_code() );
 		$this->assertSame( array( 200 ), $store->get_deleted_product_ids() );
+	}
+
+	/**
+	 * Disabling a sold bundle requires explicit confirmation and a reason.
+	 *
+	 * @return void
+	 */
+	public function test_disabling_sold_bundle_requires_confirmation_and_reason() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10 ), 3540.0 ) );
+		$store->set_completed_order_count( 200, 2 );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+		$request = $this->request( '10', 7 );
+		unset( $request[ BundleMetadata::FIELD_ENABLED ] );
+
+		$result = $service->save_from_request( 200, 1, $request );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'removal_confirmation_required', $result->get_code() );
+		$this->assertSame( array(), $store->get_deleted_product_ids() );
+		$this->assertNotNull( $store->get_saved_manifest( 200 ) );
+	}
+
+	/**
+	 * A confirmed sold-bundle disable is deleted and audited.
+	 *
+	 * @return void
+	 */
+	public function test_confirmed_sold_bundle_disable_is_audited() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10 ), 3540.0 ) );
+		$store->set_completed_order_count( 200, 2 );
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+		$request = $this->request( '10', 7 );
+		unset( $request[ BundleMetadata::FIELD_ENABLED ] );
+		$request[ BundleMetadata::FIELD_REMOVAL_CONFIRMED ] = '1';
+		$request[ BundleMetadata::FIELD_REMOVAL_REASON ]    = 'Retire this bundle.';
+
+		$result = $service->save_from_request( 200, 1, $request );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertSame( 'deleted', $result->get_code() );
+		$this->assertSame( array( 200 ), $store->get_deleted_product_ids() );
+		$this->assertNull( $store->get_saved_manifest( 200 ) );
+		$this->assertSame( array( 10 ), $store->get_audits( 200 )[0]['removed_video_ids'] );
+	}
+
+	/**
+	 * Order-impact check failures prevent removals.
+	 *
+	 * @return void
+	 */
+	public function test_order_impact_check_failure_blocks_removal() {
+		$store = new FakeBundleManifestStore();
+		$store->seed_manifest( 200, new BundleManifest( 7, array( 10, 20 ), 4140.0 ) );
+		$store->fail_order_checks();
+		$service = $this->create_service(
+			$store,
+			array( 10 => new BundleVideo( 10, 7, 'publish', 3540.0 ) )
+		);
+
+		$result = $service->save_from_request( 200, 1, $this->request( '10', 7 ) );
+
+		$this->assertFalse( $result->is_success() );
+		$this->assertSame( 'impact_check_failed', $result->get_code() );
+		$this->assertSame( array( 10, 20 ), $store->get_saved_manifest( 200 )->get_video_ids() );
 	}
 
 	/**

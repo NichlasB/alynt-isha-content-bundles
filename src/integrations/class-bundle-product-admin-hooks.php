@@ -56,6 +56,7 @@ final class BundleProductAdminHooks {
 		global $post;
 		$product_id = is_object( $post ) ? absint( $post->ID ) : 0;
 		$video_ids  = get_post_meta( $product_id, BundleMetadata::META_VIDEO_IDS, true );
+		$is_bundle  = metadata_exists( 'post', $product_id, BundleMetadata::META_TEACHER_ID );
 
 		echo '<div class="options_group show_if_simple">';
 		echo '<input type="hidden" name="' . esc_attr( BundleMetadata::FIELD_PRESENT ) . '" value="1">';
@@ -64,7 +65,7 @@ final class BundleProductAdminHooks {
 			array(
 				'id'          => BundleMetadata::FIELD_ENABLED,
 				'label'       => __( 'ISHA teacher bundle', 'alynt-isha-content-bundles' ),
-				'value'       => metadata_exists( 'post', $product_id, BundleMetadata::META_TEACHER_ID ) ? 'yes' : 'no',
+				'value'       => $is_bundle ? 'yes' : 'no',
 				'description' => __( 'Enforces the approved $50 bundle and runtime policy.', 'alynt-isha-content-bundles' ),
 			)
 		);
@@ -88,6 +89,32 @@ final class BundleProductAdminHooks {
 				'description' => __( 'Comma-separated explicit manifest. Verified runtime is calculated on save.', 'alynt-isha-content-bundles' ),
 			)
 		);
+
+		if ( $is_bundle ) {
+			$order_count = $this->manifest_admin->get_completed_order_count( $product_id );
+			if ( $order_count > 0 ) {
+				woocommerce_wp_checkbox(
+					array(
+						'id'          => BundleMetadata::FIELD_REMOVAL_CONFIRMED,
+						'label'       => __( 'Confirm sold-bundle removal', 'alynt-isha-content-bundles' ),
+						'value'       => 'no',
+						'description' => sprintf(
+							/* translators: %d: completed order count. */
+							__( 'This bundle has %d completed orders. Check only when intentionally removing videos or disabling bundle mode.', 'alynt-isha-content-bundles' ),
+							$order_count
+						),
+					)
+				);
+				woocommerce_wp_textarea_input(
+					array(
+						'id'          => BundleMetadata::FIELD_REMOVAL_REASON,
+						'label'       => __( 'Removal reason', 'alynt-isha-content-bundles' ),
+						'value'       => '',
+						'description' => __( 'Required only when removing videos from a bundle with completed orders. Do not include customer information.', 'alynt-isha-content-bundles' ),
+					)
+				);
+			}
+		}
 		echo '</div>';
 	}
 

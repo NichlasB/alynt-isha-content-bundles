@@ -94,7 +94,7 @@ final class CatalogEligibilityPolicy {
 	 * @since 0.2.0
 	 */
 	public function is_teacher_discoverable( int $teacher_id ): bool {
-		return null !== $this->get_available_bundle_product_id_for_teacher( $teacher_id );
+		return ! empty( $this->get_available_bundle_product_ids_for_teacher( $teacher_id ) );
 	}
 
 	/**
@@ -110,7 +110,42 @@ final class CatalogEligibilityPolicy {
 	}
 
 	/**
-	 * Get an available qualifying bundle for a teacher.
+	 * Get available qualifying bundles for a teacher.
+	 *
+	 * @param int $teacher_id Teacher owner ID.
+	 * @return int[]
+	 *
+	 * @since 0.3.0
+	 */
+	public function get_available_bundle_product_ids_for_teacher( int $teacher_id ): array {
+		if ( $teacher_id <= 0 ) {
+			return array();
+		}
+
+		$available = array();
+		foreach ( $this->provider->get_bundle_product_ids_for_teacher( $teacher_id ) as $product_id ) {
+			$product_id = abs( (int) $product_id );
+			if ( $product_id <= 0 || ! $this->is_qualifying_bundle_product( $product_id ) ) {
+				continue;
+			}
+
+			$manifest = $this->provider->get_bundle_manifest( $product_id );
+			if ( null !== $manifest && $teacher_id === $manifest->get_teacher_id() ) {
+				$available[ $product_id ] = $product_id;
+			}
+		}
+
+		$available = array_values( $available );
+		sort( $available, SORT_NUMERIC );
+
+		return $available;
+	}
+
+	/**
+	 * Get the first available qualifying bundle for a teacher.
+	 *
+	 * Retained for compatibility with integrations that need one representative
+	 * product rather than the complete teacher bundle collection.
 	 *
 	 * @param int $teacher_id Teacher owner ID.
 	 * @return int|null
@@ -118,23 +153,9 @@ final class CatalogEligibilityPolicy {
 	 * @since 0.2.0
 	 */
 	public function get_available_bundle_product_id_for_teacher( int $teacher_id ): ?int {
-		if ( $teacher_id <= 0 ) {
-			return null;
-		}
+		$product_ids = $this->get_available_bundle_product_ids_for_teacher( $teacher_id );
 
-		$product_id = $this->provider->get_bundle_product_id_for_teacher( $teacher_id );
-
-		if ( null === $product_id || $product_id <= 0 || ! $this->is_qualifying_bundle_product( $product_id ) ) {
-			return null;
-		}
-
-		$manifest = $this->provider->get_bundle_manifest( $product_id );
-
-		if ( null === $manifest || $teacher_id !== $manifest->get_teacher_id() ) {
-			return null;
-		}
-
-		return $product_id;
+		return empty( $product_ids ) ? null : $product_ids[0];
 	}
 
 	/**
@@ -156,7 +177,15 @@ final class CatalogEligibilityPolicy {
 			return null;
 		}
 
-		return $this->get_available_bundle_product_id_for_teacher( $teacher_id );
+		$matches = array();
+		foreach ( $this->get_available_bundle_product_ids_for_teacher( $teacher_id ) as $product_id ) {
+			$manifest = $this->provider->get_bundle_manifest( $product_id );
+			if ( null !== $manifest && in_array( $video_id, $manifest->get_video_ids(), true ) ) {
+				$matches[] = $product_id;
+			}
+		}
+
+		return 1 === count( $matches ) ? $matches[0] : null;
 	}
 
 	/**
@@ -176,6 +205,10 @@ final class CatalogEligibilityPolicy {
 			return false;
 		}
 
-		return $product_id === $this->provider->get_bundle_product_id_for_teacher( $manifest->get_teacher_id() );
+		return in_array(
+			$product_id,
+			$this->provider->get_bundle_product_ids_for_teacher( $manifest->get_teacher_id() ),
+			true
+		);
 	}
 }

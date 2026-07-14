@@ -15,8 +15,11 @@ The central resolver owns the access policy. WordPress and WooCommerce adapters 
 3. Only `completed` or `wc-completed` purchases are entitlement-bearing.
 4. A legacy product grants only its mapped individual video.
 5. A bundle product grants every valid positive video ID in its explicit manifest.
-6. Overlapping legacy and bundle entitlements are deduplicated and returned in numeric order.
-7. Invalid or malformed manifest values are ignored without invalidating the remaining manifest.
+6. A customer who purchased multiple bundles receives the union of their current manifests.
+7. Overlapping legacy and bundle entitlements are deduplicated and returned in numeric order.
+8. Invalid or malformed manifest values are ignored without invalidating the remaining manifest.
+
+Manifests are read dynamically rather than copied into order metadata. An administrator-approved video addition therefore becomes immediately available to every completed-order purchaser of that specific bundle. A purchase of another bundle by the same teacher does not grant the added video.
 
 The resolver performs no writes. The WordPress and WooCommerce adapters supply administrator capability, completed HPOS-compatible orders, the canonical legacy map, explicit bundle manifests, and the video inventory.
 

@@ -23,7 +23,7 @@ final class BootstrapTest extends TestCase {
 	 * @return void
 	 */
 	public function test_plugin_identity_constants_are_defined() {
-		$this->assertSame( '0.2.0', ALYNT_ISHA_CONTENT_BUNDLES_VERSION );
+		$this->assertSame( '0.3.0', ALYNT_ISHA_CONTENT_BUNDLES_VERSION );
 		$this->assertSame(
 			'alynt-isha-content-bundles/alynt-isha-content-bundles.php',
 			ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_BASENAME

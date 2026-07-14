@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Alynt ISHA Content Bundles
  * Description:       Manages explicit teacher content bundles and compatible legacy video entitlements for the ISHA Classes website.
- * Version:           0.2.0
+ * Version:           0.3.0
  * Author:            Alynt
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ALYNT_ISHA_CONTENT_BUNDLES_VERSION', '0.2.0' );
+define( 'ALYNT_ISHA_CONTENT_BUNDLES_VERSION', '0.3.0' );
 define( 'ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_FILE', __FILE__ );
 define( 'ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ALYNT_ISHA_CONTENT_BUNDLES_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

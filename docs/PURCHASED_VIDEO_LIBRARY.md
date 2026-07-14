@@ -24,6 +24,7 @@ Dynamic text and URL attributes are escaped. Unsafe URL schemes are rejected. Av
 
 - A completed legacy product purchase contributes only its mapped video.
 - A completed bundle purchase contributes every video in its explicit manifest.
+- Multiple completed bundle purchases contribute the union of their current manifests, including later administrator-approved additions.
 - A customer who owns both paths receives each video once.
 - Missing video presentation records are skipped rather than replaced with a different post.
 - Anonymous and invalid user IDs resolve to an empty library.

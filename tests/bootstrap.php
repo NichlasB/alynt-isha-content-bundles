@@ -84,6 +84,12 @@ if ( ! function_exists( 'absint' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_strip_all_tags' ) ) {
+	function wp_strip_all_tags( $text ) {
+		return strip_tags( $text ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Test shim for the WordPress helper.
+	}
+}
+
 if ( ! function_exists( 'register_activation_hook' ) ) {
 	function register_activation_hook( $file, $callback ) {
 		$GLOBALS['alynt_isha_content_bundles_test_hooks']['activation'] = array( $file, $callback );

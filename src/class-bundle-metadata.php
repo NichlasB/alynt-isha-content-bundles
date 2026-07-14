@@ -22,12 +22,15 @@ final class BundleMetadata {
 	const META_TEACHER_ID      = '_isha_bundle_teacher_id';
 	const META_RUNTIME_SECONDS = '_isha_bundle_runtime_seconds';
 	const META_QUALIFIES       = '_isha_bundle_qualifies';
+	const META_MANIFEST_AUDIT  = '_isha_bundle_manifest_audit';
 
-	const FIELD_PRESENT    = 'alynt_isha_content_bundles_manifest_present';
-	const FIELD_ENABLED    = 'alynt_isha_content_bundles_is_bundle';
-	const FIELD_VIDEO_IDS  = 'alynt_isha_content_bundles_video_ids';
-	const FIELD_TEACHER_ID = 'alynt_isha_content_bundles_teacher_id';
-	const FIELD_NONCE      = 'alynt_isha_content_bundles_manifest_nonce';
+	const FIELD_PRESENT           = 'alynt_isha_content_bundles_manifest_present';
+	const FIELD_ENABLED           = 'alynt_isha_content_bundles_is_bundle';
+	const FIELD_VIDEO_IDS         = 'alynt_isha_content_bundles_video_ids';
+	const FIELD_TEACHER_ID        = 'alynt_isha_content_bundles_teacher_id';
+	const FIELD_NONCE             = 'alynt_isha_content_bundles_manifest_nonce';
+	const FIELD_REMOVAL_CONFIRMED = 'alynt_isha_content_bundles_removal_confirmed';
+	const FIELD_REMOVAL_REASON    = 'alynt_isha_content_bundles_removal_reason';
 
 	const NONCE_ACTION_PREFIX = 'alynt_isha_content_bundles_save_manifest_';
 	const SAVE_CAPABILITY     = 'manage_woocommerce';

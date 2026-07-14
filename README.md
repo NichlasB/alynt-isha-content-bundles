@@ -4,17 +4,18 @@ A site-specific WordPress plugin for managing explicit teacher content bundles w
 
 ## Features
 
-- Sells one explicit, same-teacher video bundle for USD `50.00` when its verified runtime reaches the approved 3,540-second qualifying cutoff.
+- Sells any number of explicit, same-teacher video bundles for USD `50.00` each when each bundle independently reaches the approved 3,540-second qualifying cutoff.
 - Includes the approved Raw Chef Gail grace case without weakening the one-minute grace policy for other teachers.
 - Retires individual video products from new discovery and purchase while preserving access from completed historical orders.
 - Resolves bundle purchases to the current explicit video manifest, so later approved additions are available to existing bundle customers.
+- Prevents one video from being assigned to multiple managed bundles and protects sold-bundle removals with completed-order impact, explicit confirmation, a reason, and an audit record.
 - Protects direct video routes, bundle redirects, the account library, teacher pages, the Video Shop, and the compiled teacher directory through one eligibility policy.
 - Provides capability- and nonce-protected WooCommerce product fields for bundle administration.
 - Provides preview-first, signature-gated WP-CLI migration and verified rollback commands.
 
 ## Status
 
-Version `0.2.0` contains the activation-ready WordPress/WooCommerce integration for explicit teacher bundles, legacy entitlements, direct-video access, account and teacher shortcodes, catalog discovery, product administration, and approval-gated WP-CLI migration tooling. Activation and deactivation themselves remain write-free. Runtime writes occur only through an authorized bundle product save or an explicit signed migration apply/rollback command.
+Version `0.3.0` supports multiple independently qualifying bundles per teacher while retaining the activation-ready WordPress/WooCommerce integration for explicit manifests, legacy entitlements, direct-video access, account and teacher shortcodes, catalog discovery, product administration, and approval-gated WP-CLI migration tooling. Activation and deactivation themselves remain write-free. Runtime writes occur only through an authorized bundle product save or an explicit signed migration apply/rollback command.
 
 ## Requirements
 
@@ -33,7 +34,9 @@ Activation is write-free. Do not run migration apply or rollback commands unless
 
 ## Usage
 
-Administrators maintain a teacher bundle from the WooCommerce product editor. Enable **ISHA teacher bundle**, enter the teacher author ID, and provide the explicit comma-separated Video post IDs. On save, the plugin verifies ownership, publication/retention state, duplicates, measured runtime, fixed price, and virtual-product state.
+Administrators maintain each teacher bundle from the WooCommerce product editor. Enable **ISHA teacher bundle**, enter the teacher author ID, and provide the explicit comma-separated Video post IDs. On save, the plugin verifies ownership, publication/retention state, cross-bundle assignments, measured runtime, fixed price, and virtual-product state. A teacher may have multiple bundles, but each one must qualify independently and a video may belong to only one managed bundle.
+
+Adding videos to a sold bundle is allowed and immediately expands access for its completed-order purchasers. Removing videos—or disabling bundle mode—from a product with completed orders requires the displayed confirmation checkbox and a non-empty removal reason. The plugin records the administrator, UTC timestamp, removed video IDs, reason, and completed-order count; if the audit cannot be saved, it restores the previous manifest.
 
 Video runtime is maintained on the Video post in **Verified runtime (seconds)**. Use the HLS segment-duration method and operational procedure in [`docs/BUNDLE_MAINTENANCE.md`](docs/BUNDLE_MAINTENANCE.md); do not estimate from a rounded player display.
 
@@ -77,6 +80,10 @@ Their managed bundle, videos, and teacher listing are removed from public discov
 ### Do existing bundle buyers receive videos added later?
 
 Yes. A completed bundle purchase resolves against the bundle's current explicit manifest. This is the approved access default.
+
+### Can one teacher have more than one bundle?
+
+Yes. Every bundle is a separate USD `50.00` product with its own explicit same-teacher manifest and must independently reach 3,540 seconds. The same video cannot be assigned to more than one managed bundle.
 
 ### Does uninstall remove plugin data?
 

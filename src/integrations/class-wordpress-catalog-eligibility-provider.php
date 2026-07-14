@@ -41,9 +41,9 @@ final class WordPressCatalogEligibilityProvider implements CatalogEligibilityPro
 	/**
 	 * Request-local teacher bundle IDs.
 	 *
-	 * @var array<int,int|null>
+	 * @var array<int,int[]>
 	 */
-	private $teacher_bundle_cache = array();
+	private $teacher_bundles_cache = array();
 
 	/**
 	 * Request-local video teacher IDs.
@@ -115,23 +115,27 @@ final class WordPressCatalogEligibilityProvider implements CatalogEligibilityPro
 	}
 
 	/**
-	 * Find the one published bundle assigned to a teacher.
+	 * Find published bundles assigned to a teacher.
 	 *
 	 * @param int $teacher_id Teacher author ID.
-	 * @return int|null
+	 * @return int[]
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
-	public function get_bundle_product_id_for_teacher( int $teacher_id ): ?int {
-		if ( array_key_exists( $teacher_id, $this->teacher_bundle_cache ) ) {
-			return $this->teacher_bundle_cache[ $teacher_id ];
+	public function get_bundle_product_ids_for_teacher( int $teacher_id ): array {
+		if ( $teacher_id <= 0 ) {
+			return array();
+		}
+
+		if ( array_key_exists( $teacher_id, $this->teacher_bundles_cache ) ) {
+			return $this->teacher_bundles_cache[ $teacher_id ];
 		}
 
 		$ids = get_posts(
 			array(
 				'post_type'      => SiteDefinition::PRODUCT_POST_TYPE,
 				'post_status'    => 'publish',
-				'posts_per_page' => 2,
+				'posts_per_page' => -1,
 				'fields'         => 'ids',
 				'orderby'        => 'ID',
 				'order'          => 'ASC',
@@ -146,9 +150,9 @@ final class WordPressCatalogEligibilityProvider implements CatalogEligibilityPro
 			)
 		);
 
-		$this->teacher_bundle_cache[ $teacher_id ] = 1 === count( $ids ) ? absint( $ids[0] ) : null;
+		$this->teacher_bundles_cache[ $teacher_id ] = array_values( array_filter( array_map( 'absint', $ids ) ) );
 
-		return $this->teacher_bundle_cache[ $teacher_id ];
+		return $this->teacher_bundles_cache[ $teacher_id ];
 	}
 
 	/**

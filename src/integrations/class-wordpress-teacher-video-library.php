@@ -50,7 +50,7 @@ final class WordPressTeacherVideoLibrary {
 	}
 
 	/**
-	 * Get published manifest videos in reverse chronological order.
+	 * Get published qualifying-manifest videos in reverse chronological order.
 	 *
 	 * @param int $teacher_id Teacher author ID.
 	 * @return \Alynt\ISHAContentBundles\Value\LibraryVideo[]
@@ -58,10 +58,22 @@ final class WordPressTeacherVideoLibrary {
 	 * @since 0.2.0
 	 */
 	public function get_videos( int $teacher_id ): array {
-		$product_id = $this->catalog_provider->get_bundle_product_id_for_teacher( $teacher_id );
-		$manifest   = null === $product_id ? null : $this->catalog_provider->get_bundle_manifest( $product_id );
+		$manifest_video_ids = array();
+		foreach ( $this->catalog_provider->get_bundle_product_ids_for_teacher( $teacher_id ) as $product_id ) {
+			$manifest = $this->catalog_provider->get_bundle_manifest( $product_id );
+			if ( null === $manifest || $manifest->get_teacher_id() !== $teacher_id || ! $manifest->qualifies() ) {
+				continue;
+			}
 
-		if ( null === $manifest || $manifest->get_teacher_id() !== $teacher_id || ! $manifest->qualifies() ) {
+			foreach ( $manifest->get_video_ids() as $video_id ) {
+				$video_id = abs( (int) $video_id );
+				if ( $video_id > 0 ) {
+					$manifest_video_ids[ $video_id ] = $video_id;
+				}
+			}
+		}
+
+		if ( empty( $manifest_video_ids ) ) {
 			return array();
 		}
 
@@ -69,8 +81,8 @@ final class WordPressTeacherVideoLibrary {
 			array(
 				'post_type'      => SiteDefinition::VIDEO_POST_TYPE,
 				'post_status'    => 'publish',
-				'posts_per_page' => count( $manifest->get_video_ids() ),
-				'post__in'       => $manifest->get_video_ids(),
+				'posts_per_page' => count( $manifest_video_ids ),
+				'post__in'       => array_values( $manifest_video_ids ),
 				'fields'         => 'ids',
 				'author'         => $teacher_id,
 				'orderby'        => 'date',

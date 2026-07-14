@@ -7,8 +7,9 @@ This guide is the operational procedure for measuring teacher content, maintaini
 - A teacher bundle is sold for USD `50.00`.
 - The commercial runtime target is 3,600 seconds (one hour).
 - The approved qualifying cutoff is 3,540 seconds. This uniform 60-second grace window includes content that is only slightly short because of encoding or segment-boundary differences, including the approved Raw Chef Gail bundle.
-- Qualification is based on the combined verified runtime of the explicit videos in one teacher's bundle. Videos from different teachers must never be combined.
-- One teacher may have only one published qualifying bundle.
+- Qualification is based on the combined verified runtime of the explicit videos in each bundle. Videos from different teachers must never be combined.
+- One teacher may have multiple bundles. Every bundle independently qualifies, sells for USD `50.00`, and uses a distinct explicit manifest.
+- One video may belong to only one managed bundle, including while products are draft or private.
 
 The plugin applies these rules server-side. A retired individual product or a nonqualifying managed bundle remains unavailable even if somebody crafts a direct product or add-to-cart URL.
 
@@ -38,17 +39,32 @@ If the playlist cannot be measured reliably, retain the last verified value and 
 8. For a published qualifying bundle, confirm the `Teacher Bundles` product category and the `video` product tag are assigned. Retired individual products must remain without the `video` tag.
 9. Run the verification checklist below.
 
-Bundle entitlement is resolved from the product's current explicit manifest. Therefore, customers who already completed a purchase of that bundle automatically receive access to a video added later. This is the approved access default; do not create a second bundle merely to deliver the added video.
+Bundle entitlement is resolved from the purchased product's current explicit manifest. Therefore, customers who already completed a purchase of that bundle automatically receive access to a video added later. Adding a video to one bundle does not grant it to purchasers of the teacher's other bundles.
 
-## Create a bundle for a new teacher
+## Remove a video or disable a sold bundle
+
+Removing a manifest video revokes access for customers whose only entitlement came from that bundle. Disabling bundle mode removes the entire manifest and has the same consequence for every included video.
+
+Before either action:
+
+1. Confirm a current GridPane restore point and the exact product being edited.
+2. Review the completed-order count displayed in the bundle fields.
+3. Confirm that the intended videos are being removed and that no historical-access promise requires them to remain.
+4. Check **Confirm sold-bundle removal** and enter a concise non-sensitive reason. Do not include customer names, email addresses, order details, or other personal information.
+5. Save once and verify the resulting manifest, qualification, product availability, customer access, and application logs.
+
+The plugin records the administrator user ID, UTC timestamp, removed video IDs, reason, and completed-order count in append-only `_isha_bundle_manifest_audit` product metadata. If impact lookup fails, the removal is blocked. If the audit cannot be saved, the plugin attempts to restore the complete previous manifest and reports the failure. An unsold bundle can be reorganized without sold-bundle confirmation, but cross-bundle video conflicts are always blocked.
+
+## Create another bundle for a teacher
 
 1. Measure every candidate video and confirm the combined verified runtime is at least 3,540 seconds.
-2. Create one WooCommerce simple product for that teacher and enable the ISHA teacher-bundle fields.
+2. Create a WooCommerce simple product for that teacher and enable the ISHA teacher-bundle fields.
 3. Set the exact teacher owner ID and explicit ordered video post IDs.
 4. Save while the product is draft and confirm the normalized manifest, calculated runtime, qualification flag, USD `50.00` price, virtual state, stock state, and sold-individually behavior.
-5. Confirm no other published bundle uses that teacher owner ID. Duplicate published teacher bundles fail closed.
-6. Assign the `Teacher Bundles` category and `video` product tag only when the bundle qualifies and is ready for discovery.
-7. Publish only after the verification checklist passes.
+5. Confirm that none of the candidate video IDs appears in any other managed bundle, including drafts. A teacher ID may be shared across bundles; a video ID may not.
+6. Give the product a content-specific title and description so customers can distinguish it from the teacher's other bundles.
+7. Assign the `Teacher Bundles` category and `video` product tag only when the bundle qualifies and is ready for discovery.
+8. Publish only after the verification checklist passes.
 
 If the combined runtime is below 3,540 seconds, retain the product as a draft for future additions or remove it from publication and discovery. The teacher, videos, legacy mappings, orders, and entitlement records must not be deleted.
 
@@ -58,9 +74,11 @@ After a manifest or eligibility change, verify all of the following:
 
 - The bundle product is USD `50.00`, visible, purchasable, sold individually, and in stock.
 - The saved teacher ID, video IDs, calculated runtime, and qualifying result are exact.
-- The teacher resolves to exactly one published qualifying bundle.
-- Every included video appears on the teacher page and a nonbuyer is routed to that bundle.
+- The teacher resolves to all of their published qualifying bundles without affecting unrelated bundles.
+- Every included video appears once on the teacher page and a nonbuyer is routed to the exact qualifying bundle containing that video.
+- No video ID appears in more than one managed bundle manifest.
 - A completed bundle buyer can access every current manifest video.
+- A buyer of another bundle from the same teacher does not receive this bundle unless they also purchased it.
 - Historical buyers of individual products can still access the original video.
 - Nonqualifying teachers and their videos are absent from discovery.
 - The Video Shop contains the expected bundle cards and no retired individual product cards.

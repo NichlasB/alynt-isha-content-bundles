@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file.
 
 ## Unreleased
 
+## 0.3.0 - 2026-07-14
+
+- Allow one teacher to have multiple independently qualifying USD 50 bundles without making their catalog state ambiguous.
+- Route each video to the qualifying bundle whose explicit manifest contains it and aggregate all qualifying bundle manifests on teacher pages.
+- Preserve dynamic completed-order entitlements so videos appended to a sold bundle become available to its existing purchasers immediately.
+- Reject cross-bundle video assignments across published and unpublished managed bundle products.
+- Show completed-order impact in the product editor and require explicit confirmation plus a reason before removing videos from, or disabling, a sold bundle.
+- Store append-only non-sensitive removal audit metadata and restore the prior manifest when audit persistence fails.
+- Add fail-closed conflict and order-impact handling plus expanded catalog, append, removal, disabling, audit, and rollback tests.
+- Update operator, manifest, entitlement, discovery, runtime, and release documentation for administrator-only multi-bundle management.
+
 ## 0.2.0 - 2026-07-14
 
 - Add provider contracts and a central entitlement resolver for administrator, legacy-product, and explicit bundle access.

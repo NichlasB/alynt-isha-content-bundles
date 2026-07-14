@@ -24,7 +24,7 @@ final class FakeCatalogEligibilityProvider implements CatalogEligibilityProvider
 	/** @var array<int,BundleManifest> */
 	private $manifests;
 
-	/** @var array<int,int> */
+	/** @var array<int,int|int[]> */
 	private $teacher_bundle_map;
 
 	/** @var array<int,int> */
@@ -36,7 +36,7 @@ final class FakeCatalogEligibilityProvider implements CatalogEligibilityProvider
 	 * @param int[]                     $legacy_product_ids Legacy product IDs.
 	 * @param int[]                     $bundle_product_ids Bundle product IDs.
 	 * @param array<int,BundleManifest> $manifests          Manifests keyed by product ID.
-	 * @param array<int,int>            $teacher_bundle_map Bundle IDs keyed by teacher ID.
+	 * @param array<int,int|int[]>      $teacher_bundle_map Bundle IDs keyed by teacher ID.
 	 * @param array<int,int>            $video_teacher_map  Teacher IDs keyed by video ID.
 	 */
 	public function __construct(
@@ -69,8 +69,11 @@ final class FakeCatalogEligibilityProvider implements CatalogEligibilityProvider
 	}
 
 	/** {@inheritdoc} */
-	public function get_bundle_product_id_for_teacher( int $teacher_id ): ?int {
-		return $this->teacher_bundle_map[ $teacher_id ] ?? null;
+	public function get_bundle_product_ids_for_teacher( int $teacher_id ): array {
+		$value = $this->teacher_bundle_map[ $teacher_id ] ?? array();
+		$value = is_array( $value ) ? $value : array( $value );
+
+		return array_values( array_filter( array_map( 'intval', $value ) ) );
 	}
 
 	/** {@inheritdoc} */
